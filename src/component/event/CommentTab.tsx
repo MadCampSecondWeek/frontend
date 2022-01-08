@@ -1,79 +1,28 @@
 import React, { FC } from 'react'
-import { Text } from 'react-native'
-import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useContextOfAll } from '../../Provider';
+import { Dimensions } from 'react-native';
+
 
 export const CommentTab: FC<{}> = () => {
-    const TabNavigator = createMaterialTopTabNavigator(
-        {
-          Home: {
-            screen: HomeScreen,
-            navigationOptions: {
-              tabBarLabel: 'Home',
-              tabBarIcon: ({tintColor}) => (
-                <View>
-                  <Icon style={[{color: tintColor}]} size={25} name={'ios-home'} />
-                </View>
-              ),
-              initialRouteName: 'Home',
-              activeColor: '#C71585',
-              inactiveColor: '#226557',
-              barStyle: {backgroundColor: '#FFC0CB'},
-            },
-          },
-          Chat: {
-            screen: ChatScreen,
-            navigationOptions: {
-              tabBarLabel: 'Chat',
-              tabBarIcon: ({tintColor}) => (
-                <View>
-                  <Icon
-                    style={[{color: tintColor}]}
-                    size={25}
-                    name={'ios-chatboxes'}
-                  />
-                </View>
-              ),
-              activeColor: '#4B0082',
-              inactiveColor: '#226557',
-              barStyle: {backgroundColor: '#B0C4DE'},
-            },
-          },
-          Settings: {
-            screen: SettingsScreen,
-            navigationOptions: {
-              tabBarLabel: 'Settings',
-              tabBarIcon: ({tintColor}) => (
-                <View>
-                  <Icon
-                    style={[{color: tintColor}]}
-                    size={25}
-                    name={'ios-settings'}
-                  />
-                </View>
-              ),
-              activeColor: '#006400',
-              inactiveColor: '#226557',
-              barStyle: {backgroundColor: '#8FBC8F'},
-            },
-          },
-        },
-        {
-          animationEnabled: true,
-          swipeEnabled: true,
-          tabBarOptions: {
-            pressColor: 'black',
-            style: {
-              backgroundColor: 'white',
-            },
-            indicatorStyle: {
-              backgroundColor: 'black',
-            },
-            activeTintColor: '#000',
-            inactiveTintColor: '#d1cece',
-            showLabel: false,
-            showIcon: true,
-          },
-        },
-      );
-      return TabNavigator
+    const cont = useContextOfAll()
+
+    const { width, height } = Dimensions.get('window')
+
+    const style = StyleSheet.create({
+        text: {
+            width: width * 0.5, textAlign: 'center',
+            fontSize: 15, padding: 16,
+            color: cont.setting.theme.colors.text,
+        }
+    })
+
+    return <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity>
+            <Text style={ [style.text, {backgroundColor: cont.setting.theme.dark ? '#222222':'lightgrey'}] }>댓글</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+            <Text style={ [style.text, {backgroundColor: cont.setting.theme.dark ? 'forestgreen':'yellowgreen'}]}>참여 요청</Text>
+        </TouchableOpacity>
+    </View>
 }

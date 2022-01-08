@@ -47,15 +47,15 @@ export default function EventCards() {
             width: 260,
             borderRadius: 10, margin: 10,
             borderWidth: 1, borderColor: cont.setting.theme.colors.border,
-            padding: 15
+            paddingVertical: 20, paddingHorizontal: 30
         },
         title: {
             color: cont.setting.theme.colors.text,
-            fontSize: 18, paddingBottom: 10, fontWeight: 'bold'
+            fontSize: 16, paddingBottom: 10, fontWeight: 'bold'
         },
         content: {
             color: cont.setting.theme.colors.text,
-            fontSize: 14, paddingBottom: 10, marginBottom: 'auto'
+            fontSize: 13, paddingVertical: 10, marginBottom: 'auto'
         },
         row: {
             paddingVertical: 3, flexDirection: 'row'

@@ -20,7 +20,7 @@ export default function EventDetail() {
         },
         cardView: {
             width: '100%', alignSelf: 'center',
-            borderRadius: 30, margin: 10,
+            borderRadius: 30, marginTop: 10,
             backgroundColor: cont.setting.theme.colors.background
         },
         title: {
@@ -55,12 +55,12 @@ export default function EventDetail() {
 
     const bg = [require('../../images/background1.jpg')]
 
-    return <ScrollView>
+    return <View style={{flex: 1}}>
         <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
             <BackButton />
             <Text style={styles.topTitle}>이벤트 상세정보</Text></View>
-        <View>
-            <TouchableOpacity style={styles.cardView} onPress={() => { navi.navigate("이벤트 정보") }}>
+        <ScrollView style={{flex: 1}}>
+            <View style={styles.cardView}>
                 <Image source={bg[0]}
                     style={{
                         width: '100%', height: 250, borderColor: 'white', alignSelf: 'center',
@@ -85,10 +85,10 @@ export default function EventDetail() {
                 <View style={styles.scrapView}>
                     <Icon name='star-outline' color='gold' size={18} />
                     <Text style={styles.scrapText}>{currentData.scrapCount}</Text></View>
-            </TouchableOpacity>
-        </View>
-        <CommentTab />
-    </ScrollView>
+            </View>
+        </ScrollView>
+            <CommentTab />
+    </View>
 }
 
 function getJSON(setData) {
@@ -111,7 +111,7 @@ function initData() {
     return {
         _id: "0",
         title: "제목0",
-        content: "내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0",
+        content: "내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0\n\n\n\n\n\n\n\n\n내용0내용0내용0내용0내용0내용0내용0내용0",
         time: "시간0",
         headCount: 10,
         location: "장소",
