@@ -9,10 +9,10 @@ export default function HotPost() {
 
     const styles = StyleSheet.create({
         view: {
-            width: '98%', borderWidth: 1,
+            width: '96%', borderWidth: 1,
             borderColor: cont.setting.theme.colors.border,
             alignSelf: 'center', borderRadius: 10,
-            paddingVertical: 10, paddingHorizontal: 10,
+            paddingVertical: 15, paddingHorizontal: 20,
             marginVertical: 5
         },
         titleRow: {
@@ -26,16 +26,13 @@ export default function HotPost() {
         title2: {
             fontSize: 14, color: 'tomato'
         },
-        row: {
-            justifyContent: 'flex-start', flexDirection: 'row',
-            paddingVertical: 3
-        },
         postTitle: {
             fontSize: 15, color: cont.setting.theme.colors.text,
-            fontWeight: 'bold'
+            fontWeight: 'bold', paddingTop: 3
         },
         content: {
-            fontSize: 14, color: cont.setting.theme.colors.text
+            fontSize: 14, color: cont.setting.theme.colors.text,
+            paddingVertical: 5
         },
         count: {
             fontSize: 13, color: cont.setting.theme.colors.text,

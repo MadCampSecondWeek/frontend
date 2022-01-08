@@ -8,17 +8,6 @@ import { useContextOfAll } from '../../Provider'
 
 export default function EventList() {
     const [data, setData] = useState(initData())
-    const navi = useNavigation<any>()
-
-    const cont = useContextOfAll()
-
-    const styles = StyleSheet.create({
-        title: {
-            color: cont.setting.theme.colors.text,
-            fontSize: 18, padding: 10,
-            fontWeight: 'bold'
-        }
-    })
 
     useEffect(() => { getJSON(setData) }, [])
 
@@ -28,22 +17,13 @@ export default function EventList() {
 
     const Item = ({ currentData }) => (
         <View>
-            <Text style={styles.title}>{currentData.title}</Text>
+            {/* <Text style={styles.title}>{currentData.title}</Text> */}
             <Text style={{ color: 'white' }}>{currentData.content}</Text>
             <Text style={{ color: 'white' }}>{currentData.writer}</Text>
         </View>
     );
 
     return <View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={styles.title}>이벤트</Text>
-            <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity onPress={() => {navi.navigate("스크랩")}}>
-                    <Icon name='star-outline' color='gold' size={25} style={{ padding: 10 }} /></TouchableOpacity>
-                <TouchableOpacity onPress={() => {navi.navigate("업로드")}}>
-                    <Icon name='pencil-outline' color='royalblue' size={25} style={{ padding: 10 }} /></TouchableOpacity>
-            </View>
-        </View>
         <FlatList
             data={data}
             renderItem={renderItem}

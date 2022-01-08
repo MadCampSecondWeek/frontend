@@ -1,9 +1,12 @@
 import { useNavigation } from "@react-navigation/native"
-import React from "react"
+import axios from "axios"
+import React, { useEffect } from "react"
+import { useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useContextOfAll } from "../../Provider"
 
 export default function PostList() {
+    const [data, setData] = useState(initState())
     const cont = useContextOfAll()
 
     const styles = StyleSheet.create({
@@ -38,7 +41,7 @@ export default function PostList() {
         }
     })
 
-    const data = getJSON()
+    useEffect(() => {getJSON(setData)}, [])
 
     const navi = useNavigation<any>()
 
@@ -47,7 +50,7 @@ export default function PostList() {
             <Text style={styles.title}>게시판</Text>
             <Text style={styles.title2}>{'추가하기  >'}</Text>
         </TouchableOpacity>
-        {data.map(v => <TouchableOpacity key={v.id} onPress={()=>{navi.navigate("게시글", {name: v.name})}}>
+        {data.map(v => <TouchableOpacity key={v.id} onPress={() => { navi.navigate("게시글", { name: v.name }) }}>
             <Text style={styles.row} numberOfLines={1} ellipsizeMode={'tail'}>
                 <Text style={styles.post}>{v.name}    </Text>
                 <Text style={styles.content}>{v.content}</Text>
@@ -56,7 +59,20 @@ export default function PostList() {
     </View>
 }
 
-function getJSON() {
+function getJSON(setData) {
+    axios({
+        method: 'get',
+        url: 'http://192.249.18.79/board'
+    })
+        .then(function (response) {
+            console.log(response.data)
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+}
+
+function initState() {
     return [
         {
             id: 0,

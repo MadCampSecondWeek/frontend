@@ -8,7 +8,7 @@ export default function BestPost() {
 
     const styles = StyleSheet.create({
         view: {
-            width: '98%', borderWidth: 1,
+            width: '96%', borderWidth: 1,
             borderColor: cont.setting.theme.colors.border,
             alignSelf: 'center', borderRadius: 10,
             paddingVertical: 15, paddingHorizontal: 20,
@@ -45,9 +45,9 @@ export default function BestPost() {
             <Text style={styles.content} numberOfLines={2} ellipsizeMode={'tail'}>
                 {v.postContent}</Text>
             <View style={{ justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity style={styles.countView}>
+                <View style={styles.countView}>
                     <Icon name='heart-outline' color='tomato' size={16} />
-                    <Text style={styles.count}>{v.likeCount}</Text></TouchableOpacity>
+                    <Text style={styles.count}>{v.likeCount}</Text></View>
                 <View style={styles.countView}>
                     <Icon name='comment-processing-outline' color='cyan' size={16} />
                     <Text style={styles.count}>{v.commentCount}</Text></View>

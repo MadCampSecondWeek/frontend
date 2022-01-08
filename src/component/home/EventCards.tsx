@@ -45,7 +45,7 @@ export default function EventCards() {
     const styles = StyleSheet.create({
         cardView: {
             width: 260,
-            borderRadius: 10, margin: 5,
+            borderRadius: 10, margin: 10,
             borderWidth: 1, borderColor: cont.setting.theme.colors.border,
             padding: 15
         },
@@ -55,7 +55,7 @@ export default function EventCards() {
         },
         content: {
             color: cont.setting.theme.colors.text,
-            fontSize: 14, paddingBottom: 5, marginBottom: 'auto'
+            fontSize: 14, paddingBottom: 10, marginBottom: 'auto'
         },
         row: {
             paddingVertical: 3, flexDirection: 'row'
