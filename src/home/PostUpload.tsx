@@ -6,7 +6,8 @@ import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useContextOfAll } from '../Provider'
 
-export default function PostUpload() {
+export default function PostUpload({ route }) {
+    const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
     const navi = useNavigation<any>()
     const cont = useContextOfAll()
@@ -14,55 +15,61 @@ export default function PostUpload() {
     const styles = StyleSheet.create({
         top: {
             color: cont.setting.theme.colors.text,
-            fontSize: 18, fontWeight: 'bold'
+            fontSize: 18, fontWeight: 'bold', padding: 10
         },
-        title: {
-            color: cont.setting.theme.colors.text,
-            fontSize: 15, fontWeight: 'bold'
-        },
+        // title: {
+        //     color: cont.setting.theme.colors.text,
+        //     fontSize: 15, fontWeight: 'bold',
+        //     padding: 15
+        // },
         textInputTitle: {
-            borderWidth: 1, borderColor: cont.setting.theme.colors.border,
+            borderBottomWidth: 1, borderColor: cont.setting.theme.colors.border,
             color: cont.setting.theme.colors.text,
-            padding: 5, borderRadius: 5, fontSize: 16, fontWeight: 'bold'
+            padding: 10, borderRadius: 5, fontSize: 18, fontWeight: 'bold',
+            marginTop: 20, marginHorizontal: 20
         },
         textInputContent: {
-            borderWidth: 1, borderColor: cont.setting.theme.colors.border,
+            borderColor: cont.setting.theme.colors.border,
             color: cont.setting.theme.colors.text,
-            padding: 5, borderRadius: 5, fontSize: 15
+            padding: 10, borderRadius: 5, fontSize: 16,
+            marginVertical: 20, marginHorizontal: 20
         }
     })
 
-    return <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    return <View style={{ flex: 1 }}>
+        <View style={{
+            flexDirection: 'row', alignItems: 'center',
+            justifyContent: 'space-between', padding: 10
+        }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <TouchableOpacity onPress={() => { navi.goBack() }}>
                     <Icon name='close' color={cont.setting.theme.colors.text} size={28}
                         style={{ padding: 8 }} /></TouchableOpacity>
                 <Text style={styles.top}>글쓰기</Text></View>
-            <TouchableOpacity onPress={() => { postex(content) }}>
+            <TouchableOpacity onPress={() => { postex(title, content, route.params._id, navi) }}>
                 <Icon name='check-bold' color='green' size={28} style={{ padding: 8 }} />
             </TouchableOpacity>
         </View>
-        <Text style={styles.title}>제목</Text>
-        <TextInput value={content} onChangeText={setContent} style={styles.textInputTitle} />
-        <Text style={styles.title}>내용</Text>
+        <TextInput value={title} onChangeText={setTitle} style={styles.textInputTitle}
+            placeholder='제목' placeholderTextColor={'grey'} />
         <TextInput value={content} onChangeText={setContent}
-            style={styles.textInputContent} multiline={true} numberOfLines={10}/>
+            style={styles.textInputContent} multiline={true} maxLength={300}
+            placeholder='내용' placeholderTextColor={'grey'} />
     </View>
 }
 
-function postex(content) {
-    console.log(content)
+function postex(title, content, boardid, navi) {
     axios({
         method: 'post',
-        url: 'http://192.249.18.79/board/post?userid=61d87ae9fe46c6f094b969fe',
-        data: { title: "제목", content: content }
+        url: 'http://192.249.18.79/board/post?boardid=' + boardid + '&userid=61d87ae9fe46c6f094b969fe',
+        data: { title: title, content: content }
     })
         .then(function (response) { // 게시글 등록 실패 에러코드는 400, 정상 등록의 경우 200
-            // console.log(response.data)
             console.log(response.data)
             console.log(response.status)
             console.log("response 받기 성공")
+            // setLoading(true)
+            navi.goBack()
         })
         .catch(function (error) {
             console.log(error);

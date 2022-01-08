@@ -15,7 +15,7 @@ export default function Setting() {
         }
     })
     return <View>
-        <Text style={style.title}>설정</Text>
+        <Text style={style.title}>내 정보</Text>
         <AppSetting />
         <AccountSetting />
     </View>

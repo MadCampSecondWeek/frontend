@@ -24,7 +24,7 @@ export default function MainNavigator() {
       },
       tabBarActiveTintColor: color,
       tabBarShowLabel: false,
-      tabBarHideOnKeyboard: true
+      tabBarHideOnKeyboard: true,
     }
   }
 

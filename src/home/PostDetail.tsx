@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
+import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
@@ -9,7 +10,7 @@ export default function PostDetail({ route }) {
     const cont = useContextOfAll()
     const navi = useNavigation<any>()
 
-    useEffect(() => { getJSON(setData) }, [])
+    useEffect(() => { getJSON(setData, route.params._id, cont) }, [])
 
     const styles = StyleSheet.create({
         postView: {
@@ -65,11 +66,11 @@ export default function PostDetail({ route }) {
         <TouchableOpacity onPress={() => { navi.goBack() }}>
             <Icon name='chevron-left' color={cont.setting.theme.colors.text} size={30} style={{ padding: 5 }} />
         </TouchableOpacity>
-        {Post(data, styles)}
-        {data.comment.map((v) => <View key={v._id} style={styles.commentView}>
+        {Post(data, styles, route.params._id, navi, cont)}
+        {data.comments.map((v) => <View key={v._id} style={styles.commentView}>
             <View style={styles.commentRow}>
                 <Text style={{ color: cont.setting.theme.colors.text, fontSize: 17, fontWeight: 'bold' }}>
-                    익명{v.commenterNumber}</Text>
+                    {v.author}{v.commenterNumber}</Text>
                 <TouchableOpacity>
                     <Icon name='dots-vertical' color='grey' size={17} />
                 </TouchableOpacity>
@@ -91,31 +92,45 @@ export default function PostDetail({ route }) {
     </View>
 }
 
-function Post(data, styles) {
+function Post(data, styles, boardid, navi, cont) {
     return <View style={styles.postView}>
         <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-            <Text style={styles.post}>{data.title}</Text>
-            <TouchableOpacity>
+            <Text style={styles.post}>{data.post.title}</Text>
+            <TouchableOpacity onPress={() => {onPressDelete(boardid, navi, cont)}}>
                 <Icon name='dots-vertical' color='grey' size={17} />
             </TouchableOpacity>
         </View>
-        <Text style={styles.content}>{data.content}</Text>
+        <Text style={styles.content}>{data.post.content}</Text>
         {CountView(data, styles)}
     </View>
 }
 
-function onPressDelete() {
-    //
+function onPressDelete(postid, navi, cont) {
+    axios({
+        method: 'delete',
+        url: 'http://192.249.18.79/board/post?postid='+postid+'&userid='+cont.user._id
+    })
+        .then(function (response) { // 실패 에러코드는 400, 정상의 경우 200
+            // console.log(response.data)
+            console.log(response.data)
+            console.log(response.status)
+            console.log("response 받기 성공")
+            // setLoading(true)
+            navi.goBack()
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
 }
 
 function CountView(data, styles) {
     return <View style={{ justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity style={styles.countView}>
             <Icon name='heart-outline' color='tomato' size={16} />
-            <Text style={styles.count}>{data.likeCount}</Text></TouchableOpacity>
+            <Text style={styles.count}>{data.post.likeCount}</Text></TouchableOpacity>
         <View style={styles.countView}>
             <Icon name='comment-processing-outline' color='cyan' size={16} />
-            <Text style={styles.count}>{data.commentCount}</Text></View>
+            <Text style={styles.count}>{data.post.commentCount}</Text></View>
     </View>
 }
 
@@ -123,22 +138,34 @@ function onPressLike() {
     // 좋아요 눌렀을 때
 }
 
-function getJSON(setData) {
-
+function getJSON(setData, postid, cont) {
+    axios({
+        method: 'get',
+        url: 'http://192.249.18.79/board/post?postid='+postid+'&userid='+cont.user._id
+    })
+        .then(function (response) {
+            setData(response.data)
+            console.log(response.data)
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
 }
 
 function initState() {
     return {
-        _id: "게시글 고유번호",
-        title: "게시글 제목",
-        content: "게시글 상세 내용",
-        likeCount: 3,
-        commentCount: 1,
-        writerId: "작성자 고유번호",
-        comment: [
+        post: {
+            _id: "게시글 고유번호",
+            title: "게시글 제목",
+            content: "게시글 상세 내용",
+            likeCount: 3,
+            commentCount: 1,
+            writerId: "작성자 고유번호"
+        },
+        comments: [
             {
                 _id: "댓글 고유번호",
-                commenter: "댓글 작성자 고유번호",
+                author: "댓글 작성자 고유번호",
                 commenterNumber: 1,
                 content: "댓글 내용",
                 likeCount: 4,

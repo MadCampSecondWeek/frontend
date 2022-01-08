@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
 import Event from "./Event"
+import EventDetail from "./EventDetail"
 import Scrap from "./Scrap"
 import Upload from "./Upload"
 
@@ -10,5 +11,6 @@ export default function EventNavigator() {
         <Stack.Screen name="이벤트 홈" component={Event} />
         <Stack.Screen name="스크랩" component={Scrap} />
         <Stack.Screen name="업로드" component={Upload} />
+        <Stack.Screen name="이벤트 정보" component={EventDetail} />
     </Stack.Navigator>
 }

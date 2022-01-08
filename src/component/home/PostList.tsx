@@ -41,19 +41,26 @@ export default function PostList() {
         }
     })
 
-    useEffect(() => {getJSON(setData)}, [])
+    // useEffect(() => {getJSON(setData)}, [])
 
     const navi = useNavigation<any>()
+
+    useEffect(() => {
+        const reload = navi.addListener('focus', () => {
+            getJSON(setData)
+        });
+        return reload;
+    }, [navi]);
 
     return <View style={styles.view}>
         <TouchableOpacity style={styles.titleRow}>
             <Text style={styles.title}>게시판</Text>
             <Text style={styles.title2}>{'추가하기  >'}</Text>
         </TouchableOpacity>
-        {data.map(v => <TouchableOpacity key={v.id} onPress={() => { navi.navigate("게시글", { name: v.name }) }}>
+        {data.map(v => <TouchableOpacity key={v._id} onPress={() => { navi.navigate("게시글", { name: v.title, _id: v._id }) }}>
             <Text style={styles.row} numberOfLines={1} ellipsizeMode={'tail'}>
-                <Text style={styles.post}>{v.name}    </Text>
-                <Text style={styles.content}>{v.content}</Text>
+                <Text style={styles.post}>{v.title}    </Text>
+                <Text style={styles.content}>{v.recentPost}</Text>
             </Text>
         </TouchableOpacity>)}
     </View>
@@ -62,9 +69,10 @@ export default function PostList() {
 function getJSON(setData) {
     axios({
         method: 'get',
-        url: 'http://192.249.18.79/board'
+        url: 'http://192.249.18.79/'
     })
         .then(function (response) {
+            setData(response.data)
             console.log(response.data)
         })
         .catch(function (error) {
@@ -75,29 +83,29 @@ function getJSON(setData) {
 function initState() {
     return [
         {
-            id: 0,
-            name: '게시판명0',
-            content: '내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0',
+            _id: 0,
+            title: '게시판명0',
+            recentPost: '내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0',
         },
         {
-            id: 1,
-            name: '게시판명1',
-            content: '내용1',
+            _id: 1,
+            title: '게시판명1',
+            recentPost: '내용1',
         },
         {
-            id: 2,
-            name: '게시판명2',
-            content: '내용2',
+            _id: 2,
+            title: '게시판명2',
+            recentPost: '내용2',
         },
         {
-            id: 3,
-            name: '게시판명3',
-            content: '내용3',
+            _id: 3,
+            title: '게시판명3',
+            recentPost: '내용3',
         },
         {
-            id: 4,
-            name: '게시판명4',
-            content: '내용4',
+            _id: 4,
+            title: '게시판명4',
+            recentPost: '내용4',
         }
     ]
 }

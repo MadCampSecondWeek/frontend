@@ -2,13 +2,14 @@ import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
 import React, { useEffect } from "react"
 import { useState } from "react"
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { BackButton } from "../component/util"
 import { useContextOfAll } from "../Provider"
 
 export default function Posts({ route }) {
-    const [data, setData] = useState([{ _id: "123123", title: "제목 0", content: "내용0", likeCount: 3, commentCount: 1 }])
-    // const [ld, setLd] = useState(true)
+    const [data, setData] = useState(initState())
+    const [loading, setLoading] = useState(true)
     const cont = useContextOfAll()
     const navi = useNavigation<any>()
 
@@ -16,16 +17,16 @@ export default function Posts({ route }) {
         titleView: {
             flexDirection: 'row',
             alignItems: 'center',
-            paddingTop: 10
+            padding: 10
         },
         title: {
-            fontSize: 20, color: cont.setting.theme.colors.text,
-            fontWeight: 'bold'
+            fontSize: 18, color: cont.setting.theme.colors.text,
+            fontWeight: 'bold', padding: 10
         },
         postView: {
-            padding: 5, borderBottomWidth: 1,
+            padding: 15, borderBottomWidth: 1,
             borderColor: cont.setting.theme.colors.border,
-            margin: 5
+            marginHorizontal: 15
         },
         post: {
             fontSize: 15, color: cont.setting.theme.colors.text,
@@ -43,46 +44,52 @@ export default function Posts({ route }) {
         }
     })
 
-    useEffect(() => { getJSON(setData) }, [])
+    // useEffect(() => { getJSON(setData, route.params._id, setLoading, loading) }, [])
 
-    // if (ld) return <Text>로딩 중</Text>
+    useEffect(() => {
+        const reload = navi.addListener('focus', () => {
+            getJSON(setData, route.params._id, setLoading, loading)
+        });
+        return reload;
+      }, [navi]);
 
-    return <View>
+    // if (loading) return <View />
+
+    return <View style={{flex:1}}>
         <View style={styles.titleView}>
-            <TouchableOpacity onPress={() => { navi.goBack() }} style={{ paddingHorizontal: 5 }}>
-                <Icon name='chevron-left' color={cont.setting.theme.colors.text} size={30} />
-            </TouchableOpacity>
+            <BackButton />
             <Text style={styles.title}>{route.params.name}</Text>
             <TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 10 }}
-                onPress={() => navi.navigate("게시글 업로드")}>
+                onPress={() => { navi.navigate("게시글 업로드", { _id: route.params._id }); }}>
                 <Icon name='pencil-outline' size={25} color='royalblue' />
             </TouchableOpacity>
         </View>
-        {data.map((v) => <TouchableOpacity key={v._id} style={styles.postView}
-            onPress={() => { navi.navigate("게시글 상세", { _id: v._id }) }}>
-            <Text style={styles.post}>{v.title}</Text>
-            <Text style={styles.content}>{v.content}</Text>
-            <View style={{ justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center' }}>
-                <View style={styles.countView}>
-                    <Icon name='heart-outline' color='red' size={16} />
-                    <Text style={styles.count}>{v.likeCount}</Text></View>
-                <View style={styles.countView}>
-                    <Icon name='comment-processing-outline' color='cyan' size={16} />
-                    <Text style={styles.count}>{v.commentCount}</Text></View>
-            </View>
-        </TouchableOpacity>
-        )}
+        <ScrollView>
+            {data.map((v) => <TouchableOpacity key={v._id} style={styles.postView} activeOpacity={1}
+                onPress={() => { navi.navigate("게시글 상세", { _id: v._id }) }}>
+                <Text style={styles.post}>{v.title}</Text>
+                <Text style={styles.content}>{v.content}</Text>
+                <View style={{ justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={styles.countView}>
+                        <Icon name='heart-outline' color='red' size={16} />
+                        <Text style={styles.count}>{v.likeCount}</Text></View>
+                    <View style={styles.countView}>
+                        <Icon name='comment-processing-outline' color='cyan' size={16} />
+                        <Text style={styles.count}>{v.commentCount}</Text></View>
+                </View>
+            </TouchableOpacity>)}</ScrollView>
     </View>
 }
 
-function getJSON(setData) {
+function getJSON(setData, bid, setLoading, loading) {
+    if (loading == false) return;
     axios({
         method: 'get',
-        url: 'http://172.10.5.54/board'
+        url: 'http://192.249.18.79/board?boardid=' + bid
     })
         .then(function (response) {
             setData(response.data)
-            // setLd(false)
+            setLoading(false)
             console.log(response.data)
         })
         .catch(function (error) {
@@ -126,4 +133,10 @@ function getJSON(setData) {
     //         commentCount: 1
     //     }
     // ]
+
+    //{ _id: "123123", title: "제목 0", content: "내용0", likeCount: 3, commentCount: 1 }
+}
+
+function initState() {
+    return [{ _id: "123123", title: "제목 0", content: "내용0", likeCount: 3, commentCount: 1 }]
 }

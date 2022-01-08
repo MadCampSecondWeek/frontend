@@ -13,11 +13,12 @@ export default function Event() {
     const styles = StyleSheet.create({
         title: {
             color: cont.setting.theme.colors.text,
-            fontSize: 18, padding: 10,
+            fontSize: 20, padding: 15,
             fontWeight: 'bold'
         }
     })
-    return <View>
+    
+    return <View style={{flex:1}}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text style={styles.title}>이벤트</Text>
             <View style={{ flexDirection: 'row' }}>
