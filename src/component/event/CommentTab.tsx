@@ -13,16 +13,16 @@ export const CommentTab: FC<{}> = () => {
         text: {
             width: width * 0.5, textAlign: 'center',
             fontSize: 15, padding: 16,
-            color: cont.setting.theme.colors.text,
+            color: cont.setting.theme.colors.background,
         }
     })
 
     return <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity>
-            <Text style={ [style.text, {backgroundColor: cont.setting.theme.dark ? '#222222':'lightgrey'}] }>댓글</Text>
+            <Text style={ [style.text, {backgroundColor: cont.setting.theme.dark ? 'lightgrey' : '#333333'}] }>댓글</Text>
         </TouchableOpacity>
         <TouchableOpacity>
-            <Text style={ [style.text, {backgroundColor: cont.setting.theme.dark ? 'forestgreen':'yellowgreen'}]}>참여 요청</Text>
+            <Text style={ [style.text, {backgroundColor: '#FFB830'}]}>참여 요청</Text>
         </TouchableOpacity>
     </View>
 }

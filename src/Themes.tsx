@@ -3,7 +3,7 @@ import React from 'react'
 export const DarkTheme = {
   dark: true,
   colors: {
-    primary: 'green',
+    primary: '#222222',
     background: 'black',
     card: 'black',
     text: 'white',
@@ -15,7 +15,7 @@ export const DarkTheme = {
 export const DayTheme = {
   dark: false,
   colors: {
-    primary: 'green',
+    primary: '#dddddd',
     background: 'white',
     card: 'white',
     text: 'black',

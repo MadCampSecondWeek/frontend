@@ -13,7 +13,9 @@ export type FontSizeContextType = {
     setting: {
         theme: Theme
     },
-    setSetting: any
+    setSetting: any,
+    isLoggedIn: boolean,
+    setLogin: any
 }
 
 const defaultContext = {
@@ -24,8 +26,11 @@ const defaultContext = {
     }, setUser: undefined,
     setting: {
         theme: DarkTheme
-    }, setSetting: undefined
+    }, setSetting: undefined,
+    isLoggedIn: false,
+    setLogin: undefined
 }
+
 const ContextOfAll = createContext<FontSizeContextType>(defaultContext)
 
 export const Provider: FC<{}> = ({ children }) => {
@@ -35,7 +40,8 @@ export const Provider: FC<{}> = ({ children }) => {
         pinnedPost: ["게시판0", "게시판1", "게시판2, 게시판3", "게시판4"]
     })
     const [setting, setSetting] = useState({ theme: DarkTheme })
-    const value = { user, setUser, setting, setSetting }
+    const [isLoggedIn, setLogin] = useState(false)
+    const value = { user, setUser, setting, setSetting, isLoggedIn, setLogin }
     return (
         <ContextOfAll.Provider value={value}>
             {children}

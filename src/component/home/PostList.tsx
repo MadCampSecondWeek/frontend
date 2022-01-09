@@ -5,9 +5,9 @@ import { useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useContextOfAll } from "../../Provider"
 
-export default function PostList() {
-    const [data, setData] = useState(initState())
+export default function PostList(data) {
     const cont = useContextOfAll()
+    const navi = useNavigation<any>()
 
     const styles = StyleSheet.create({
         view: {
@@ -42,15 +42,7 @@ export default function PostList() {
     })
 
     // useEffect(() => {getJSON(setData)}, [])
-
-    const navi = useNavigation<any>()
-
-    useEffect(() => {
-        const reload = navi.addListener('focus', () => {
-            getJSON(setData)
-        });
-        return reload;
-    }, [navi]);
+    console.log(data)
 
     return <View style={styles.view}>
         <TouchableOpacity style={styles.titleRow}>
@@ -64,48 +56,4 @@ export default function PostList() {
             </Text>
         </TouchableOpacity>)}
     </View>
-}
-
-function getJSON(setData) {
-    axios({
-        method: 'get',
-        url: 'http://192.249.18.79/'
-    })
-        .then(function (response) {
-            setData(response.data)
-            console.log(response.data)
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-}
-
-function initState() {
-    return [
-        {
-            _id: 0,
-            title: '게시판명0',
-            recentPost: '내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0',
-        },
-        {
-            _id: 1,
-            title: '게시판명1',
-            recentPost: '내용1',
-        },
-        {
-            _id: 2,
-            title: '게시판명2',
-            recentPost: '내용2',
-        },
-        {
-            _id: 3,
-            title: '게시판명3',
-            recentPost: '내용3',
-        },
-        {
-            _id: 4,
-            title: '게시판명4',
-            recentPost: '내용4',
-        }
-    ]
 }

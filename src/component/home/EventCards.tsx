@@ -20,34 +20,29 @@ export default function EventCards() {
             <Text style={{ color: 'grey', fontSize: 11 }}>
                 더 보기</Text>
         </TouchableOpacity> :
-        <TouchableOpacity style={styles.cardView}>
+        <TouchableOpacity style={styles.cardView} onPress={() => { navi.navigate("이벤트 정보")}}>
             <Text style={styles.title}>{currentData.title}</Text>
+            <View style={styles.row}>
+                <Icon name='map-marker-outline' color='grey' size={15} />
+                <Text style={styles.infoText}>장소 정보</Text>
+            </View>
             <Text numberOfLines={2} ellipsizeMode={'tail'} style={styles.content}>
                 {currentData.content}</Text>
             <View style={styles.row}>
-                <Icon name='clock-outline' color='blue' size={17} />
-                <Text style={styles.infoText}>시간 정보</Text>
+                <Text style={[styles.infoText , {color: '#60abfb'}]}>01/10 13:00</Text>
             </View>
-            <View style={styles.row}>
-                <Icon name='map-marker-outline' color='chocolate' size={17} />
-                <Text style={styles.infoText}>장소 정보</Text>
-            </View>
-            <View style={styles.row}>
-                <Icon name='account-multiple-outline' color='blueviolet' size={17} />
-                <Text style={styles.infoText}>인원 정보</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                <Icon name='star-outline' color='gold' size={17} />
-                <Text style={styles.scrapText}>10</Text></View>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingTop: 5 }}>
+                <Icon name='account-multiple-outline' color='#9b77da' size={15} />
+                <Text style={[styles.infoText, {color:'#9b77da'}]}>10명</Text></View>
         </TouchableOpacity>
     );
 
     const styles = StyleSheet.create({
         cardView: {
-            width: 260,
+            width: 250,
             borderRadius: 10, margin: 10,
             borderWidth: 1, borderColor: cont.setting.theme.colors.border,
-            paddingVertical: 20, paddingHorizontal: 30
+            paddingVertical: 20, paddingHorizontal: 20
         },
         title: {
             color: cont.setting.theme.colors.text,
@@ -55,23 +50,19 @@ export default function EventCards() {
         },
         content: {
             color: cont.setting.theme.colors.text,
-            fontSize: 13, paddingVertical: 10, marginBottom: 'auto'
+            fontSize: 13, paddingBottom: 10, marginBottom: 'auto',
+            paddingTop: 5
         },
         row: {
             paddingVertical: 3, flexDirection: 'row'
         },
         infoText: {
-            color: 'grey', fontSize: 13,
+            color: 'grey', fontSize: 12,
             paddingHorizontal: 5
         },
-        scrapText: {
-            color: cont.setting.theme.colors.text,
-            fontSize: 12, marginLeft: 2
-        }
     })
 
     return <View>
-        {/* <Text style={styles.top}>진행중인 이벤트</Text> */}
         <FlatList
             data={data}
             renderItem={renderItem}

@@ -49,7 +49,7 @@ export default function BestPost() {
                     <Icon name='heart-outline' color='tomato' size={16} />
                     <Text style={styles.count}>{v.likeCount}</Text></View>
                 <View style={styles.countView}>
-                    <Icon name='comment-processing-outline' color='cyan' size={16} />
+                    <Icon name='comment-processing-outline' color='#00B4D8' size={16} />
                     <Text style={styles.count}>{v.commentCount}</Text></View>
             </View>
         </TouchableOpacity>)}

@@ -15,24 +15,25 @@ export default function EventDetail() {
 
     const styles = StyleSheet.create({
         topTitle: {
-            color: cont.setting.theme.colors.text,
+            color: cont.setting.theme.colors.background,
             fontSize: 18, fontWeight: 'bold'
         },
         cardView: {
             width: '100%', alignSelf: 'center',
-            borderRadius: 30, marginTop: 10,
-            backgroundColor: cont.setting.theme.colors.background
+            backgroundColor: cont.setting.theme.colors.background,
+            borderTopRightRadius: 30, borderTopLeftRadius: 30
         },
         title: {
             color: cont.setting.theme.colors.text,
-            fontSize: 18, fontWeight: 'bold',
+            fontSize: 35, fontWeight: 'bold',
             backgroundColor: cont.setting.theme.colors.background,
             marginTop: -30, borderTopRightRadius: 30, borderTopLeftRadius: 30,
             paddingHorizontal: 30, paddingTop: 30,
+            paddingBottom: 30
         },
         content: {
             color: cont.setting.theme.colors.text,
-            fontSize: 16, paddingTop: 10, marginBottom: 'auto',
+            fontSize: 16, marginBottom: 'auto',
             paddingHorizontal: 30, paddingBottom: 20
         },
         row: {
@@ -41,7 +42,7 @@ export default function EventDetail() {
         },
         infoText: {
             color: cont.setting.theme.colors.text, fontSize: 14,
-            paddingHorizontal: 5
+            paddingHorizontal: 30
         },
         scrapView: {
             flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center',
@@ -50,16 +51,26 @@ export default function EventDetail() {
         scrapText: {
             color: cont.setting.theme.colors.text,
             fontSize: 14, marginLeft: 2
+        },
+        tag: {
+            fontSize: 14, color: '#48CAE4',// '#639cd9',
+            paddingBottom: 10, paddingHorizontal: 30,
+            paddingTop: 20
         }
     })
 
-    const bg = [require('../../images/background1.jpg')]
+    const bg = [require('../../images/background8.jpg')]
 
-    return <View style={{flex: 1}}>
+    //borderTopLeftRadius: 30, borderTopRightRadius: 30, 
+
+    return <View style={{ flex: 1, backgroundColor: '#3DB2FF' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
-            <BackButton />
+            <TouchableOpacity onPress={() => { navi.goBack() }}>
+                <Icon name='chevron-left' color={cont.setting.theme.colors.background} size={30} style={{ padding: 5 }} />
+            </TouchableOpacity>
             <Text style={styles.topTitle}>이벤트 상세정보</Text></View>
-        <ScrollView style={{flex: 1}}>
+            {/* <View style={{height: 30, width: 30, backgroundColor: 'red', borderTopLeftRadius: 30, position: 'absolute', marginBottom: 30}}/> */}
+        <ScrollView style={{ flex: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30, backgroundColor: cont.setting.theme.colors.background }}>
             <View style={styles.cardView}>
                 <Image source={bg[0]}
                     style={{
@@ -68,26 +79,21 @@ export default function EventDetail() {
                     }}
                     resizeMode='cover' />
                 <Text style={styles.title}>{currentData.title}</Text>
+                <Text style={styles.tag}>ABOUT</Text>
                 <Text style={styles.content}>
                     {currentData.content}</Text>
-                <View style={styles.row}>
-                    <Icon name='clock-outline' color='blue' size={18} />
-                    <Text style={styles.infoText}>{currentData.time}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Icon name='map-marker-outline' color='chocolate' size={18} />
-                    <Text style={styles.infoText}>{currentData.location}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Icon name='account-multiple-outline' color='blueviolet' size={18} />
-                    <Text style={styles.infoText}>{currentData.headCount}</Text>
-                </View>
+                <Text style={styles.tag}>DATE AND TIME</Text>
+                <Text style={styles.infoText}>{currentData.time}</Text>
+                <Text style={styles.tag}>LOCATION</Text>
+                <Text style={styles.infoText}>{currentData.location}</Text>
+                <Text style={styles.tag}>NUMBER OF PEOPLE</Text>
+                <Text style={styles.infoText}>{currentData.headCount}</Text>
                 <View style={styles.scrapView}>
                     <Icon name='star-outline' color='gold' size={18} />
                     <Text style={styles.scrapText}>{currentData.scrapCount}</Text></View>
             </View>
         </ScrollView>
-            <CommentTab />
+        <CommentTab />
     </View>
 }
 
@@ -110,8 +116,8 @@ function getJSON(setData) {
 function initData() {
     return {
         _id: "0",
-        title: "제목0",
-        content: "내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0\n\n\n\n\n\n\n\n\n내용0내용0내용0내용0내용0내용0내용0내용0",
+        title: "제목0제목0제목0제목0제목0제목0",
+        content: "내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0\n내용0\n내용0\n내용0\n내용0\n내용0\n내용0\n내용0\n내용0",
         time: "시간0",
         headCount: 10,
         location: "장소",
