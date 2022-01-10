@@ -2,10 +2,12 @@ import React, { FC } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useContextOfAll } from '../../Provider';
 import { Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
 export const CommentTab: FC<{}> = () => {
     const cont = useContextOfAll()
+    const navi = useNavigation<any>()
 
     const { width, height } = Dimensions.get('window')
 
@@ -18,7 +20,7 @@ export const CommentTab: FC<{}> = () => {
     })
 
     return <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => {navi.navigate('이벤트 댓글1')}}>
             <Text style={ [style.text, {backgroundColor: cont.setting.theme.dark ? 'lightgrey' : '#333333'}] }>댓글</Text>
         </TouchableOpacity>
         <TouchableOpacity>

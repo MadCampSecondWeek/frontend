@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useContextOfAll } from "../../Provider"
 
-export default function BestPost() {
+export default function BestPost(data) {
     const cont = useContextOfAll()
 
     const styles = StyleSheet.create({
@@ -19,7 +19,7 @@ export default function BestPost() {
             fontWeight: 'bold', paddingVertical: 10
         },
         postTitle: {
-            fontSize: 15, color: cont.setting.theme.colors.text,
+            fontSize: 14, color: cont.setting.theme.colors.text,
             fontWeight: 'bold', paddingTop: 3
         },
         content: {
@@ -36,14 +36,16 @@ export default function BestPost() {
         }
     })
 
-    const data = getJSON()
+    // const data = getJSON()
+
+    console.log(data)
 
     return <View style={styles.view}>
         <Text style={styles.title}>실시간 인기 글</Text>
-        {data.map((v) => <TouchableOpacity key={v.id}>
-            <Text style={styles.postTitle}>{v.postTitle}</Text>
+        {/* {data.map((v) => <TouchableOpacity key={v._id}>
+            <Text style={styles.postTitle}>{v.title}</Text>
             <Text style={styles.content} numberOfLines={2} ellipsizeMode={'tail'}>
-                {v.postContent}</Text>
+                {v.content}</Text>
             <View style={{ justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center' }}>
                 <View style={styles.countView}>
                     <Icon name='heart-outline' color='tomato' size={16} />
@@ -52,7 +54,7 @@ export default function BestPost() {
                     <Icon name='comment-processing-outline' color='#00B4D8' size={16} />
                     <Text style={styles.count}>{v.commentCount}</Text></View>
             </View>
-        </TouchableOpacity>)}
+        </TouchableOpacity>)} */}
     </View>
 }
 

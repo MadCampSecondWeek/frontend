@@ -33,11 +33,11 @@ export default function PostList(data) {
             paddingVertical: 6
         },
         post: {
-            fontSize: 15, color: cont.setting.theme.colors.text,
+            fontSize: 14, color: cont.setting.theme.colors.text,
             fontWeight: 'bold'
         },
         content: {
-            fontSize: 14, color: cont.setting.theme.colors.text
+            fontSize: 13, color: 'grey'
         }
     })
 
@@ -45,7 +45,7 @@ export default function PostList(data) {
     console.log(data)
 
     return <View style={styles.view}>
-        <TouchableOpacity style={styles.titleRow}>
+        <TouchableOpacity style={styles.titleRow} onPress={() => {navi.navigate('게시판 추가')}}>
             <Text style={styles.title}>게시판</Text>
             <Text style={styles.title2}>{'추가하기  >'}</Text>
         </TouchableOpacity>

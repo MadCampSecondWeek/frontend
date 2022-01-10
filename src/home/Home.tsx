@@ -30,8 +30,8 @@ export default function Home() {
             {cont.user.school}</Text>
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
             <EventCards />
-            {PostList(data)}
-            <BestPost />
+            {PostList(data.boards)}
+            {BestPost(data.todayPopularBoard)}
             <HotPost />
         </ScrollView>
     </View>
@@ -53,31 +53,69 @@ function getJSON(setData) {
 
 
 function initState() {
-    return [
-        {
-            _id: 0,
-            title: '게시판명0',
-            recentPost: '내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0',
-        },
-        {
-            _id: 1,
-            title: '게시판명1',
-            recentPost: '내용1',
-        },
-        {
-            _id: 2,
-            title: '게시판명2',
-            recentPost: '내용2',
-        },
-        {
-            _id: 3,
-            title: '게시판명3',
-            recentPost: '내용3',
-        },
-        {
-            _id: 4,
-            title: '게시판명4',
-            recentPost: '내용4',
-        }
-    ]
+    return {
+        boards: [
+            {
+                _id: "아이디",
+                title: '타이틀',
+                school: 2100,
+                idx: 30,
+                recentPost: '최근 게시글',
+            }
+        ],
+        hotBoard: [
+            {
+                _id: '아이디',
+                board: {
+                    _id: '아이디',
+                    title: '타이틀'
+                },
+                title: '게시글',
+                content: '내용',
+                likeCount: 100,
+                commentCount: 10
+            }
+        ],
+        todayPopularBoard: [
+            {
+                _id: '아이디',
+                board: {
+                    _id: '아이디',
+                    title: '타이틀'
+                },
+                title: '게시글',
+                content: '내용',
+                likeCount: 100,
+                commentCount: 10
+            }
+        ]
+
+    }
+    // return [
+    //     {
+    //         _id: 0,
+    //         title: '게시판명0',
+    //         recentPost: '내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0',
+    //     },
+    //     {
+    //         _id: 1,
+    //         title: '게시판명1',
+    //         recentPost: '내용1',
+    //     },
+    //     {
+    //         _id: 2,
+    //         title: '게시판명2',
+    //         recentPost: '내용2',
+    //     },
+    //     {
+    //         _id: 3,
+    //         title: '게시판명3',
+    //         recentPost: '내용3',
+    //     },
+    //     {
+    //         _id: 4,
+    //         title: '게시판명4',
+    //         recentPost: '내용4',
+    //     }
+    // ]
 }

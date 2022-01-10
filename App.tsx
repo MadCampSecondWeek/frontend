@@ -46,8 +46,8 @@ import { Provider, useContextOfAll } from './src/Provider'
 // }
 
 export default function App() {
-  return <Provider><MainNavigator /></Provider>
-  // return <Provider><Tmp/></Provider>
+  // return <Provider><MainNavigator /></Provider>
+  return <Provider><Tmp/></Provider>
 }
 
 const Tmp: FC<{}> = () => {

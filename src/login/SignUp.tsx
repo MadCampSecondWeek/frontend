@@ -2,18 +2,20 @@ import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import { useContextOfAll } from "../Provider";
 
 export default function SignUpPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorMsg, setError] = useState('')
+    const cont = useContextOfAll()
     const navi = useNavigation<any>()
     return <View style={style.container}>
         <Text style={style.title}>Sign Up</Text>
         <TextInput placeholder='이메일' onChangeText={setEmail} keyboardType='email-address' style={style.textInput} />
         <TextInput placeholder='비밀번호' onChangeText={setPassword} secureTextEntry={true} style={style.textInput} />
         <Text style={style.errorMsg}>{errorMsg}</Text>
-        <TouchableOpacity onPress={() => { onPress(email, password, setError) }}>
+        <TouchableOpacity onPress={() => { onPress(email, password, setError, cont) }}>
             <Text style={style.signUpBtn}>회원가입</Text></TouchableOpacity>
         <View style={style.bottomView}>
             <View style={{ borderRightWidth: 1, borderColor: 'grey' }}>
@@ -26,15 +28,15 @@ export default function SignUpPage() {
     </View>
 }
 
-function onPress(email, password, cont) {
+function onPress(email, password, setError, cont) {
     axios({
         method: 'post',
         url: 'http://192.249.18.79/auth/join',
-        data: { email: '아이디1', password: '패스워드', school: 100 }
+        data: { email: email, password: password, school: 2100 }
     })
         .then(function (response) {
             console.log(response)
-            cont.setLogin(response.data)
+            cont.setLogin(true)
         })
         .catch(function (error) {
             console.log(error);

@@ -68,22 +68,24 @@ export default function PostDetail({ route }) {
         }
     })
 
+    console.log(data)
+
     return <View style={{ flex: 1 }}>
         <View style={{ padding: 10 }}>
             <BackButton /></View>
-        <ScrollView style={{ paddingHorizontal: 15, flex: 1 }}>
-            {Post(data, styles, route.params._id, navi, cont)}
+        <ScrollView style={{ paddingHorizontal: 10, flex: 1 }}>
+            {Post(data, styles, route.params._id, navi, cont, route, comment)}
             {data.comments.map((v) => <View key={v._id} style={styles.commentView}>
                 <View style={styles.commentRow}>
                     <Text style={styles.commentAuthor}>
-                        {v.author}{v.commenterNumber}</Text>
+                        익명{v.author.idx}</Text>
                     <TouchableOpacity>
                         <Icon name='dots-vertical' color='grey' size={17} />
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.commentContent}>{v.content}</Text>
                 <View style={styles.commentRow}>
-                    <Text style={styles.commentTime}>{v.time}</Text>
+                    <Text style={styles.commentTime}>{v.createdAt}</Text>
                     <TouchableOpacity style={styles.countView}>
                         <Icon name='heart-outline' color='tomato' size={16} />
                         <Text style={styles.count}>{v.likeCount}</Text></TouchableOpacity>
@@ -93,14 +95,14 @@ export default function PostDetail({ route }) {
         <View style={styles.textInputRow}>
             <TextInput style={styles.textInput} multiline={true} numberOfLines={2}
                 value={comment} onChangeText={setComment} />
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {onPressComment(route.params._id, navi, comment)}}>
                 <Icon name='check-bold' size={20} color='green' style={{ padding: 6 }} />
             </TouchableOpacity>
         </View>
     </View>
 }
 
-function Post(data, styles, boardid, navi, cont) {
+function Post(data, styles, boardid, navi, cont, route, comment) {
     return <View style={styles.postView}>
         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
             <Text style={styles.post}>{data.post.title}</Text>
@@ -109,7 +111,14 @@ function Post(data, styles, boardid, navi, cont) {
             </TouchableOpacity>
         </View>
         <Text style={styles.content}>{data.post.content}</Text>
-        {CountView(data, styles)}
+        <View style={{ justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity style={styles.countView} onPress={() => {onPressLike(route.params._id, navi)}}>
+            <Icon name={data.isLiked?'heart':'heart-outline'} color='tomato' size={16} />
+            <Text style={styles.count}>{data.post.likeCount}</Text></TouchableOpacity>
+        <View style={styles.countView}>
+            <Icon name='comment-processing-outline' color='cyan' size={16} />
+            <Text style={styles.count}>{data.post.commentCount}</Text></View>
+    </View>
     </View>
 }
 
@@ -131,32 +140,38 @@ function onPressDelete(postid, navi, cont) {
         })
 }
 
-function CountView(data, styles) {
-    return <View style={{ justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center' }}>
-        <TouchableOpacity style={styles.countView}>
-            <Icon name='heart-outline' color='tomato' size={16} />
-            <Text style={styles.count}>{data.post.likeCount}</Text></TouchableOpacity>
-        <View style={styles.countView}>
-            <Icon name='comment-processing-outline' color='cyan' size={16} />
-            <Text style={styles.count}>{data.post.commentCount}</Text></View>
-    </View>
-}
-
-function onPressLike() {
-    // 좋아요 눌렀을 때
-}
-
-function onPressComment() {
+function onPressLike(postid, navi) {
     axios({
         method: 'get',
-        url: 'http://192.249.18.79/board/post?postid=' + postid + '&userid=' + cont.user._id
+        url: 'http://192.249.18.79/board/post/like?postid=' + postid// + '&userid=' + cont.user._id
+    })
+        .then(function (response) { // 실패 에러코드는 400, 정상의 경우 200
+            // console.log(response.data)
+            console.log(response.data)
+            console.log(response.status)
+            console.log("response 받기 성공")
+            // setLoading(true)
+            navi.replace('게시글 상세', { _id: postid })
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+}
+
+function onPressComment(postid, navi, comment) {
+    // navi.replace('게시글 상세', { _id: postid })
+    axios({
+        method: 'post',
+        url: 'http://192.249.18.79/board/comment?postid=' + postid,
+        data: {content: comment}
     })
         .then(function (response) {
-            setData(response.data)
+            navi.replace('게시글 상세', { _id: postid })
             console.log(response.data)
         })
         .catch(function (error) {
             console.log(error);
+            navi.replace('게시글 상세')
         })
 }
 
@@ -187,52 +202,53 @@ function initState() {
         comments: [
             {
                 _id: "댓글 고유번호2",
-                author: "댓글 작성자 고유번호",
+                author: {idx: 1},
                 commenterNumber: 1,
                 content: "댓글 내용",
                 likeCount: 4,
-                time: "22/01/07 09:22"
+                createdAt: "22/01/07 09:22"
             },
-            {
-                _id: "댓글 고유번호3",
-                author: "댓글 작성자 고유번호",
-                commenterNumber: 1,
-                content: "댓글 내용",
-                likeCount: 4,
-                time: "22/01/07 09:22"
-            },
-            {
-                _id: "댓글 고유번호4",
-                author: "댓글 작성자 고유번호",
-                commenterNumber: 1,
-                content: "댓글 내용",
-                likeCount: 4,
-                time: "22/01/07 09:22"
-            },
-            {
-                _id: "댓글 고유번호5",
-                author: "댓글 작성자 고유번호",
-                commenterNumber: 1,
-                content: "댓글 내용",
-                likeCount: 4,
-                time: "22/01/07 09:22"
-            },
-            {
-                _id: "댓글 고유번호6",
-                author: "댓글 작성자 고유번호",
-                commenterNumber: 1,
-                content: "댓글 내용",
-                likeCount: 4,
-                time: "22/01/07 09:22"
-            },
-            {
-                _id: "댓글 고유번호7",
-                author: "댓글 작성자 고유번호",
-                commenterNumber: 1,
-                content: "댓글 내용",
-                likeCount: 4,
-                time: "22/01/07 09:22"
-            }
-        ]
+            // {
+            //     _id: "댓글 고유번호3",
+            //     author: "댓글 작성자 고유번호",
+            //     commenterNumber: 1,
+            //     content: "댓글 내용",
+            //     likeCount: 4,
+            //     time: "22/01/07 09:22"
+            // },
+            // {
+            //     _id: "댓글 고유번호4",
+            //     author: "댓글 작성자 고유번호",
+            //     commenterNumber: 1,
+            //     content: "댓글 내용",
+            //     likeCount: 4,
+            //     time: "22/01/07 09:22"
+            // },
+            // {
+            //     _id: "댓글 고유번호5",
+            //     author: "댓글 작성자 고유번호",
+            //     commenterNumber: 1,
+            //     content: "댓글 내용",
+            //     likeCount: 4,
+            //     time: "22/01/07 09:22"
+            // },
+            // {
+            //     _id: "댓글 고유번호6",
+            //     author: "댓글 작성자 고유번호",
+            //     commenterNumber: 1,
+            //     content: "댓글 내용",
+            //     likeCount: 4,
+            //     time: "22/01/07 09:22"
+            // },
+            // {
+            //     _id: "댓글 고유번호7",
+            //     author: "댓글 작성자 고유번호",
+            //     commenterNumber: 1,
+            //     content: "댓글 내용",
+            //     likeCount: 4,
+            //     time: "22/01/07 09:22"
+            // }
+        ],
+        isLiked: false
     }
 }

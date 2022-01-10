@@ -32,7 +32,7 @@ function onPress(email, password, setError, cont) {
   axios({
     method: 'post',
     url: 'http://192.249.18.79/auth/login',
-    data: { email: email, password: password, }
+    data: { email: 'ggg@naver.com', password: 'ggg' }
   })
     .then(function (response) {
       console.log("then")

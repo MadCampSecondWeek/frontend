@@ -27,7 +27,7 @@ export default function HotPost() {
             fontSize: 14, color: 'tomato'
         },
         postTitle: {
-            fontSize: 15, color: cont.setting.theme.colors.text,
+            fontSize: 14, color: cont.setting.theme.colors.text,
             fontWeight: 'bold', paddingTop: 3
         },
         content: {

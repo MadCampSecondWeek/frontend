@@ -1,5 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
+import CommentPage1 from "./CommentPage1"
 import Event from "./Event"
 import EventDetail from "./EventDetail"
 import Scrap from "./Scrap"
@@ -12,5 +13,6 @@ export default function EventNavigator() {
         <Stack.Screen name="스크랩" component={Scrap} />
         <Stack.Screen name="업로드" component={Upload} />
         <Stack.Screen name="이벤트 정보" component={EventDetail} />
+        <Stack.Screen name='이벤트 댓글1' component={CommentPage1} />
     </Stack.Navigator>
 }
