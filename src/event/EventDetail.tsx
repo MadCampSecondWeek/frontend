@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import CommentTab from '../component/event/CommentTab'
 import { BackButton } from '../component/util'
 import { useContextOfAll } from '../Provider'
+import { bg } from './imageArray'
 
 export default function EventDetail({ route }) {
     const [currentData, setData] = useState(initData())
@@ -65,8 +66,6 @@ export default function EventDetail({ route }) {
             paddingTop: 20
         }
     })
-
-    const bg = [require('../../images/background8.jpg')]
 
     return <View style={{ flex: 1, backgroundColor: '#192965' }}>
         <View style={{justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center'}}>

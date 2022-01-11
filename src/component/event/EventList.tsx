@@ -5,9 +5,10 @@ import { useEffect } from 'react'
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { bg } from '../../event/imageArray'
 import { useContextOfAll } from '../../Provider'
 
-const BGSIZE = 8
+const BGSIZE = 6
 
 export const EventList: FC<{}> = () => {
     const navi = useNavigation<any>()
@@ -22,12 +23,7 @@ export const EventList: FC<{}> = () => {
     const renderItem = ({ item }) => (
         <Item currentData={item} />
     )
-
-    const bg = [require('../../../images/background1.jpg'), require('../../../images/background2.jpg'),
-    require('../../../images/background3.jpg'), require('../../../images/background4.jpg'),
-    require('../../../images/background5.jpg'), require('../../../images/background6.jpg'),
-    require('../../../images/background7.jpg'), require('../../../images/background8.jpg')]
-
+    
     const Item = ({ currentData }) => <TouchableOpacity style={styles.cardView} onPress={() => {
         navi.navigate("이벤트 정보", { _id: currentData._id })
     }} activeOpacity={1}>

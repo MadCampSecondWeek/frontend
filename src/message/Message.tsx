@@ -1,9 +1,7 @@
 import React from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { useContextOfAll } from "../Provider"
-
-// import { startSocketIO } from './services/socketIO';
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 
 
 export default function Message() {
@@ -15,6 +13,8 @@ export default function Message() {
         }
     })
 
+    const io = require('socket.io-client');
+
     const socket = io('http://192.249.18.79', {
         transports: ['websocket'],
         jsonp: false
@@ -22,9 +22,9 @@ export default function Message() {
 
     console.log(socket)
 
-    const url = new URL('http://192.249.18.79');
+    const url = new URL('http://192.249.18.79:80');
 
-    socket.connect(new URL('http://192.249.18.79'), {
+    socket.connect(url, {
         transports: ['websocket'],
         jsonp: false
       });
@@ -33,8 +33,9 @@ export default function Message() {
 
     socket.on('connect', () => {
         console.log('connection');
-        socket.emit("join", "World")
     })
+
+    socket.emit("join", 2100)
 
     console.log(socket)
 
@@ -53,24 +54,24 @@ export default function Message() {
 }
 
 
-function tmp() {
-    const socket = io('http://292.249.18.79:80', {
-        transports: ['websocket'],
-        jsonp: false
-    });
+// function tmp() {
+//     const socket = io('http://292.249.18.79:80', {
+//         transports: ['websocket'],
+//         jsonp: false
+//     });
 
-    socket.connect();
+//     socket.connect();
 
-    socket.on('connect', () => {
-        console.log('connection');
-    })
+//     socket.on('connect', () => {
+//         console.log('connection');
+//     })
 
-    socket.on('disconnect', () => {
-        console.log('connection to server lost.');
-    });
+//     socket.on('disconnect', () => {
+//         console.log('connection to server lost.');
+//     });
 
-    socket.on('newMessage', (message) => {
-        console.log(message)
-    });
+//     socket.on('newMessage', (message) => {
+//         console.log(message)
+//     });
 
-}
+// }

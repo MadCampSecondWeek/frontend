@@ -5,6 +5,7 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { BackButton } from '../component/util'
 import { useContextOfAll } from '../Provider'
+import { bg } from './imageArray'
 
 export default function Scrap() {
     const cont = useContextOfAll()
@@ -18,10 +19,6 @@ export default function Scrap() {
     const renderItem = ({ item }) => (
         <Item currentData={item} />
     )
-
-    const bg = [require('../../images/background1.jpg'), require('../../images/background2.jpg'),
-    require('../../images/background3.jpg'), require('../../images/background4.jpg'),
-    require('../../images/background5.jpg'), require('../../images/background6.jpg')]
 
     const Item = ({ currentData }) => <TouchableOpacity style={styles.cardView} onPress={() => {
         navi.navigate("이벤트 정보", { _id: currentData._id })
