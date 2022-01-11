@@ -14,7 +14,7 @@ export const EventList: FC<{}> = () => {
     const navi = useNavigation<any>()
     const cont = useContextOfAll()
     const [select, setSelect] = useState(0)
-    const [data, setData] = useState(initData())
+    const [data, setData] = useState([])
 
     useEffect(() => {
         getJSON(setData, select)
@@ -27,7 +27,7 @@ export const EventList: FC<{}> = () => {
     const Item = ({ currentData }) => <TouchableOpacity style={styles.cardView} onPress={() => {
         navi.navigate("이벤트 정보", { _id: currentData._id })
     }} activeOpacity={1}>
-        <Image source={bg[rand()]}
+        <Image source={bg[currentData.category]}
             style={{
                 width: '100%', height: 200, borderColor: 'white', alignSelf: 'center',
                 borderTopRightRadius: 10, borderTopLeftRadius: 10

@@ -4,14 +4,11 @@ import React, { useState } from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useContextOfAll } from '../Provider'
 import { useContextOfLogin } from './LoginProvider'
 
-export default function SchoolSearch({ route }) {
+export default function SchoolSearch() {
     const [text, setText] = useState('')
     const [names, setNames] = useState([])
-    const [select, setSelect] = useState('')
-    const cont = useContextOfAll()
     const navi = useNavigation<any>()
     const loginCont = useContextOfLogin()
     return <View style={{ backgroundColor: 'white', flex: 1 }}>
@@ -19,7 +16,7 @@ export default function SchoolSearch({ route }) {
             <Text style={{ fontSize: 20, color: 'black', padding: 15 }}>
                 학교 설정</Text>
             <TouchableOpacity onPress={() => { navi.goBack() }}>
-                <Icon name='check-bold' color='green' size={28} style={{ padding: 15 }} />
+                <Icon name='check-bold' color='royalblue' size={28} style={{ padding: 15 }} />
             </TouchableOpacity>
         </View>
         <View style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center' }}>
@@ -37,20 +34,22 @@ export default function SchoolSearch({ route }) {
                 }}>검색</Text></TouchableOpacity>
         </View>
         <ScrollView style={{ flex: 1 }}>
-            {names.map((v) => <TouchableOpacity onPress={() => { loginCont.setSchoolName(v) }}
-                style={{
-                    borderWidth: 1, borderColor: 'green',
+            {names.length == 0 ? <TouchableOpacity onPress={() => { loginCont.setSchoolName(text); navi.goBack() }}>
+                <Text style={{
+                    borderWidth: 1, borderColor: 'royalblue',
                     marginVertical: 5, marginHorizontal: 20, padding: 10,
-                    borderRadius: 10, backgroundColor: v == loginCont.schoolName ? 'green' : 'white'
-                }}>
-                <Text style={{ fontSize: 17, color: v == loginCont.schoolName ? 'white' : 'green' }}>{v}</Text>
-            </TouchableOpacity>)}
+                    borderRadius: 10, fontSize: 17, color: 'royalblue'
+                }}>"{text}"로 학교 설정하기</Text></TouchableOpacity> :
+                names.map((v, i) => <TouchableOpacity onPress={() => { loginCont.setSchoolName(v) }} key={i}
+                    style={{
+                        borderWidth: 1, borderColor: 'royalblue',
+                        marginVertical: 5, marginHorizontal: 20, padding: 10,
+                        borderRadius: 10, backgroundColor: v == loginCont.schoolName ? 'royalblue' : 'white'
+                    }}>
+                    <Text style={{ fontSize: 17, color: v == loginCont.schoolName ? 'white' : 'royalblue' }}>{v}</Text>
+                </TouchableOpacity>)}
         </ScrollView>
     </View>
-}
-
-function onSelect(schoolName, loginCont) {
-
 }
 
 function onPress(text, setNames) {
@@ -66,11 +65,12 @@ function onPress(text, setNames) {
             // console.log(info.schoolInfo[1].row[0].SD_SCHUL_CODE)
             // const code = info.schoolInfo[1].row[0].SD_SCHUL_CODE
             let names: String[] = []
-            for (let i = 0; i < (info.schoolInfo[1].row).length; ++i) {
-                // console.log(info.schoolInfo[1].row[i].SCHUL_NM)
-                if (!names.includes(info.schoolInfo[1].row[i].SCHUL_NM))
-                    names.push(info.schoolInfo[1].row[i].SCHUL_NM)
-            }
+            if (!(info.schoolInfo === undefined))
+                for (let i = 0; i < (info.schoolInfo[1].row).length; ++i) {
+                    // console.log(info.schoolInfo[1].row[i].SCHUL_NM)
+                    if (!names.includes(info.schoolInfo[1].row[i].SCHUL_NM))
+                        names.push(info.schoolInfo[1].row[i].SCHUL_NM)
+                }
             setNames(names)
         })
         .catch(function (error) {

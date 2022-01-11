@@ -45,7 +45,6 @@ function onPress(email, password, setError, cont, loginCont, navi) {
         data: { email: email, password: password, school: loginCont.schoolName }
     })
         .then(function (response) {
-            console.log(response)
             ToastAndroid.show('회원가입 성공!', ToastAndroid.SHORT)
             navi.replace('Login')
         })

@@ -9,7 +9,7 @@ import { bg } from './imageArray'
 
 export default function Scrap() {
     const cont = useContextOfAll()
-    const [data, setData] = useState(initData())
+    const [data, setData] = useState([])
     const navi = useNavigation<any>()
 
     useEffect(() => {

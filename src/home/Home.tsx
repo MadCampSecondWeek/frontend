@@ -10,46 +10,55 @@ import { useNavigation } from "@react-navigation/native"
 
 export default function Home() {
     const [data, setData] = useState(initState())
+    const [loading, setLoading] = useState(true)
     const cont = useContextOfAll()
 
     const navi = useNavigation<any>()
 
     useEffect(() => {
         const reload = navi.addListener('focus', () => {
-            getJSON(setData)
+            getJSON(setData, setLoading, cont)
         });
         return reload;
     }, [navi]);
-    
-    return <View style={{flex: 1}}>
+
+    return <View style={{ flex: 1 }}>
         <Text style={{
             fontSize: 20, fontWeight: 'bold',
             color: cont.setting.theme.colors.text,
             margin: 15
         }}>
             {cont.user.school}</Text>
-        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-            {EventCards(data.eventBoard, cont, navi)}
-            {PostList(data.boards, cont)}
-            {BestPost(data.todayPopularBoard, cont)}
-            {HotPost(data.hotBoard, cont)}
-        </ScrollView>
+        {loading ? <View /> :
+            <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+                {EventCards(data.eventBoard, cont, navi)}
+                {PostList(data.boards, cont)}
+                {BestPost(data.todayPopularBoard, cont)}
+                {HotPost(data.hotBoard, cont)}
+            </ScrollView>}
     </View>
 }
 
-function getJSON(setData) {
+function getJSON(setData, setLoading, cont) {
     axios({
         method: 'get',
         url: 'http://192.249.18.79/'
     })
         .then(function (response) {
             setData(response.data)
+            setLoading(false)
+            cont.setUser(() => {
+                return {
+                    _id: '61d87ae9fe46c6f094b969fe',
+                    school: response.data.school,
+                    pinnedPost: ["게시판0", "게시판1", "게시판2, 게시판3", "게시판4"]
+                }
+            })
         })
         .catch(function (error) {
             console.log(error);
         })
 }
-
 
 function initState() {
     return {
@@ -88,7 +97,10 @@ function initState() {
             //     commentCount: 10
             // }
         ],
-        eventBoard: []
+        eventBoard: [
+
+        ],
+        school: '몰입캠프'
 
     }
     // return [
