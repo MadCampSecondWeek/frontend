@@ -12,8 +12,10 @@ export default function LoginPage() {
   const navi = useNavigation<any>()
   return <View style={style.container}>
     <Text style={style.title}>Login</Text>
-    <TextInput placeholder='이메일' onChangeText={setEmail} keyboardType='email-address' style={style.textInput} />
-    <TextInput placeholder='비밀번호' onChangeText={setPassword} secureTextEntry={true} style={style.textInput} />
+    <TextInput placeholder='이메일' onChangeText={setEmail} keyboardType='email-address'
+      style={style.textInput} placeholderTextColor='grey' autoCapitalize='none' />
+    <TextInput placeholder='비밀번호' onChangeText={setPassword} secureTextEntry={true}
+      style={style.textInput} placeholderTextColor='grey' autoCapitalize='none' />
     <Text style={style.errorMsg}>{errorMsg}</Text>
     <TouchableOpacity onPress={() => { onPress(email, password, setError, cont) }}>
       <Text style={style.loginBtn}>로그인</Text></TouchableOpacity>
@@ -32,11 +34,9 @@ function onPress(email, password, setError, cont) {
   axios({
     method: 'post',
     url: 'http://192.249.18.79/auth/login',
-    data: { email: 'ggg@naver.com', password: 'ggg' }
+    data: { email: email, password: password }
   })
     .then(function (response) {
-      console.log("then")
-      console.log(response.data)
       cont.setLogin(true)
     })
     .catch(function (error) {
@@ -58,7 +58,7 @@ const style = StyleSheet.create({
   textInput: {
     width: 300, height: 50, borderWidth: 1,
     borderColor: 'grey', marginVertical: 10,
-    paddingHorizontal: 10
+    paddingHorizontal: 10, color: 'grey'
   },
   loginBtn: {
     width: 300, height: 50, textAlign: 'center', textAlignVertical: 'center',
@@ -71,7 +71,8 @@ const style = StyleSheet.create({
   },
   bottomEach: {
     fontSize: 13, width: 150, textAlign: 'center',
-    height: 20, textAlignVertical: 'center'
+    height: 20, textAlignVertical: 'center',
+    color: 'grey'
   },
   errorMsg: {
     color: 'red', width: 300,

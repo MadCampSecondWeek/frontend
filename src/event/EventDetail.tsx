@@ -1,21 +1,28 @@
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
-import React, { useState } from 'react'
-import { Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Alert, Image, ImageBackground, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { CommentTab } from '../component/event/CommentTab'
+import CommentTab from '../component/event/CommentTab'
 import { BackButton } from '../component/util'
 import { useContextOfAll } from '../Provider'
 
-export default function EventDetail() {
+export default function EventDetail({ route }) {
     const [currentData, setData] = useState(initData())
     const navi = useNavigation<any>()
     const cont = useContextOfAll()
 
+    useEffect(() => {
+        const reload = navi.addListener('focus', () => {
+            getJSON(route.params._id, setData)
+        });
+        return reload;
+    }, [navi]);
+
     const styles = StyleSheet.create({
         topTitle: {
-            color: cont.setting.theme.colors.background,
+            color: 'white',
             fontSize: 18, fontWeight: 'bold'
         },
         cardView: {
@@ -61,16 +68,19 @@ export default function EventDetail() {
 
     const bg = [require('../../images/background8.jpg')]
 
-    //borderTopLeftRadius: 30, borderTopRightRadius: 30, 
-
-    return <View style={{ flex: 1, backgroundColor: '#3DB2FF' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
-            <TouchableOpacity onPress={() => { navi.goBack() }}>
-                <Icon name='chevron-left' color={cont.setting.theme.colors.background} size={30} style={{ padding: 5 }} />
-            </TouchableOpacity>
-            <Text style={styles.topTitle}>이벤트 상세정보</Text></View>
-            {/* <View style={{height: 30, width: 30, backgroundColor: 'red', borderTopLeftRadius: 30, position: 'absolute', marginBottom: 30}}/> */}
-        <ScrollView style={{ flex: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30, backgroundColor: cont.setting.theme.colors.background }}>
+    return <View style={{ flex: 1, backgroundColor: '#192965' }}>
+        <View style={{justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+                <TouchableOpacity onPress={() => { navi.goBack() }}>
+                    <Icon name='chevron-left' color='white' size={30} style={{ padding: 5 }} />
+                </TouchableOpacity>
+                <Text style={styles.topTitle}>이벤트 상세정보</Text></View>
+            {currentData.isAuthor ?
+                <TouchableOpacity onPress={() => { onPressDelete(route.params._id, navi) }}>
+                    <Icon name='delete-outline' color='white' size={25} style={{paddingRight: 20}} />
+                </TouchableOpacity> : undefined}
+        </View>
+        <ScrollView style={{ flex: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30 }}>
             <View style={styles.cardView}>
                 <Image source={bg[0]}
                     style={{
@@ -88,39 +98,75 @@ export default function EventDetail() {
                 <Text style={styles.infoText}>{currentData.location}</Text>
                 <Text style={styles.tag}>NUMBER OF PEOPLE</Text>
                 <Text style={styles.infoText}>{currentData.headCount}</Text>
-                <View style={styles.scrapView}>
-                    <Icon name='star-outline' color='gold' size={18} />
-                    <Text style={styles.scrapText}>{currentData.scrapCount}</Text></View>
+                <TouchableOpacity style={styles.scrapView} onPress={() => {
+                    onPressScrap(currentData._id, navi, currentData.isScrapped)
+                }}>
+                    <Icon name={currentData.isScrapped ? 'star' : 'star-outline'} color='gold' size={18} />
+                    <Text style={styles.scrapText}>{currentData.scrapCount}</Text></TouchableOpacity>
             </View>
         </ScrollView>
-        <CommentTab />
+        {CommentTab(cont, navi, currentData._id)}
     </View>
 }
 
-function getJSON(setData) {
+function getJSON(_id, setData) {
     axios({
         method: 'get',
-        url: 'http://192.249.18.79/board'
+        url: 'http://192.249.18.79/eventboard/event?eventid=' + _id
     })
         .then(function (response) {
-            // console.log(response.data)
-            console.log(typeof response.data)
-            console.log("response 받기 성공")
             setData(() => response.data)
+            console.log(response.data)
         })
         .catch(function (error) {
             console.log(error);
         })
 }
 
+function onPressScrap(eventid, navi, isScrapped) {
+    Alert.alert("스크랩", isScrapped ? '스크랩 취소하겠습니까?' : "스크랩하시겠습니까?", [{ text: '취소' }, {
+        text: '확인', onPress: () => {
+            axios({
+                method: 'post',
+                url: 'http://192.249.18.79/eventboard/event/scrap?eventid=' + eventid
+            })
+                .then(function (response) {
+                    navi.replace('이벤트 정보', { _id: eventid })
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+    }])
+}
+
+function onPressDelete(eventid, navi) {
+    Alert.alert("삭제", "삭제하시겠습니까?", [{ text: '취소' }, {
+        text: '삭제', onPress: () => {
+            axios({
+                method: 'delete',
+                url: 'http://192.249.18.79/eventboard/event?eventid=' + eventid
+            })
+                .then(function (response) {
+                    navi.goBack()
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+    }])
+}
+
 function initData() {
     return {
         _id: "0",
-        title: "제목0제목0제목0제목0제목0제목0",
-        content: "내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0\n내용0\n내용0\n내용0\n내용0\n내용0\n내용0\n내용0\n내용0",
-        time: "시간0",
-        headCount: 10,
-        location: "장소",
-        scrapCount: 11
+        title: "",
+        content: "",
+        time: "",
+        headCount: 0,
+        location: "",
+        scrapCount: 0,
+        isScrapped: false,
+        isAuthor: false
     }
 }

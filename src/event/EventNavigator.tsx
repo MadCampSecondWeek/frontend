@@ -8,7 +8,7 @@ import Upload from "./Upload"
 
 export default function EventNavigator() {
     const Stack = createStackNavigator()
-    return <Stack.Navigator screenOptions={{headerShown: false}}>
+    return <Stack.Navigator screenOptions={{headerShown: false, animationEnabled: false}} initialRouteName='이벤트 홈'>
         <Stack.Screen name="이벤트 홈" component={Event} />
         <Stack.Screen name="스크랩" component={Scrap} />
         <Stack.Screen name="업로드" component={Upload} />

@@ -3,6 +3,7 @@ import React, { FC, useEffect } from 'react'
 import { useState } from 'react'
 import { Text, View } from 'react-native'
 import LoginNavigator from './src/login/LoginNavigator'
+import { LoginProvider } from './src/login/LoginProvider'
 import MainNavigator from './src/MainNavigator'
 import { Provider, useContextOfAll } from './src/Provider'
 
@@ -53,7 +54,7 @@ export default function App() {
 const Tmp: FC<{}> = () => {
   const cont = useContextOfAll()
   if (cont.isLoggedIn) return <MainNavigator />
-  return <LoginNavigator />
+  return <LoginProvider><LoginNavigator /></LoginProvider>
 }
 
 // export default function App() { // 500 -> 서버 내부 에러 // 403 -> 이미 유저 존재 // 200 -> 회원가입 성공

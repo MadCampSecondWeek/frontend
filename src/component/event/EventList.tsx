@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { useEffect } from 'react'
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
@@ -9,12 +9,15 @@ import { useContextOfAll } from '../../Provider'
 
 const BGSIZE = 8
 
-export default function EventList() {
-    const [data, setData] = useState(initData())
+export const EventList: FC<{}> = () => {
     const navi = useNavigation<any>()
     const cont = useContextOfAll()
+    const [select, setSelect] = useState(0)
+    const [data, setData] = useState(initData())
 
-    // useEffect(() => { getJSON(setData) }, [])
+    useEffect(() => {
+        getJSON(setData, select)
+    }, [select]);
 
     const renderItem = ({ item }) => (
         <Item currentData={item} />
@@ -25,74 +28,73 @@ export default function EventList() {
     require('../../../images/background5.jpg'), require('../../../images/background6.jpg'),
     require('../../../images/background7.jpg'), require('../../../images/background8.jpg')]
 
-    const Item = ({ currentData }) => (<View>
-        <TouchableOpacity style={styles.cardView} onPress={() => { navi.navigate("이벤트 정보") }} activeOpacity={1}>
-            <Image source={bg[rand()]}
-                style={{
-                    width: '100%', height: 150, borderColor: 'white', alignSelf: 'center',
-                    borderTopRightRadius: 30, borderTopLeftRadius: 30
-                }}
-                resizeMode='cover' />
-            <Text style={styles.title}>{currentData.title}</Text>
-            <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                <View style={styles.row}>
-                    <Text style={[styles.infoText, { color: '#83cee0', paddingHorizontal: 0 }]}>{currentData.time}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Icon name='account-multiple-outline' color='#5f5dbd' size={15} />
-                    <Text style={[styles.infoText, { color: '#5f5dbd' }]}>{currentData.headCount}</Text>
-                </View>
-            </View>
-            <Text numberOfLines={2} ellipsizeMode={'tail'} style={styles.content}>
-                {currentData.content}</Text>
-            <View style={styles.row}>
-                <Icon name='map-marker-outline' color='grey' size={15} />
-                <Text style={styles.infoText}>{currentData.location}</Text>
-            </View>
+    const Item = ({ currentData }) => <TouchableOpacity style={styles.cardView} onPress={() => {
+        navi.navigate("이벤트 정보", { _id: currentData._id })
+    }} activeOpacity={1}>
+        <Image source={bg[rand()]}
+            style={{
+                width: '100%', height: 200, borderColor: 'white', alignSelf: 'center',
+                borderTopRightRadius: 10, borderTopLeftRadius: 10
+            }}
+            resizeMode='cover' />
+        <Text style={styles.title}>{currentData.title}</Text>
+        <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
             <View style={styles.scrapView}>
-                <Icon name='star-outline' color='gold' size={15} />
+                <Icon name='map-marker-outline' color='grey' size={17} />
+                <Text style={[styles.infoText, { color: 'grey' }]}>{currentData.location}</Text></View>
+            <View style={styles.scrapView}>
+                <Icon name='star-outline' color='gold' size={17} />
                 <Text style={styles.scrapText}>{currentData.scrapCount}</Text></View>
-        </TouchableOpacity>
-    </View>);
+        </View>
+        <Text numberOfLines={2} ellipsizeMode={'tail'} style={styles.content}>
+            {currentData.content}</Text>
+        <View style={{ justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 30, paddingVertical: 10 }}>
+            <View style={{ width: '50%' }}>
+                <Text style={[styles.infoText, { color: 'grey' }]}>시간</Text>
+                <Text style={[styles.infoText,]}>{currentData.time}</Text>
+            </View>
+            <View style={{ width: '50%' }}>
+                <Text style={[styles.infoText, { color: 'grey' }]}>인원</Text>
+                <Text style={[styles.infoText,]}>{currentData.headCount}</Text></View>
+        </View>
+    </TouchableOpacity>
 
     const styles = StyleSheet.create({
         cardView: {
             width: '90%', alignSelf: 'center',
-            borderRadius: 30, margin: 10,
+            borderRadius: 10, margin: 10,
             borderWidth: 1, borderColor: cont.setting.theme.colors.border,
-            backgroundColor: cont.setting.theme.colors.background
+            backgroundColor: cont.setting.theme.colors.background,
+            paddingBottom: 20
         },
         title: {
             color: cont.setting.theme.colors.text,
-            fontSize: 16, fontWeight: 'bold',
+            fontSize: 24, fontWeight: 'bold',
             backgroundColor: cont.setting.theme.colors.background,
-            marginTop: -30, borderTopRightRadius: 30, borderTopLeftRadius: 30,
-            paddingHorizontal: 30, paddingTop: 30,
+            marginTop: -30,// borderTopRightRadius: 30, borderTopLeftRadius: 30,
+            paddingHorizontal: 30, paddingTop: 20,
         },
         content: {
             color: cont.setting.theme.colors.text,
-            fontSize: 14, paddingTop: 10, marginBottom: 'auto',
-            paddingHorizontal: 30, paddingBottom: 10
-        },
-        row: {
-            paddingVertical: 3, flexDirection: 'row',
-            paddingHorizontal: 30
+            fontSize: 15, marginBottom: 'auto',
+            paddingHorizontal: 30, paddingBottom: 20,
+            fontWeight: 'bold'
         },
         infoText: {
-            color: cont.setting.theme.colors.text, fontSize: 12,
+            color: cont.setting.theme.colors.text, fontSize: 14,
             paddingHorizontal: 5
         },
         scrapView: {
-            flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center',
-            paddingHorizontal: 30, paddingBottom: 30
+            flexDirection: 'row', alignItems: 'center',
+            paddingHorizontal: 30, paddingVertical: 20
         },
         scrapText: {
             color: cont.setting.theme.colors.text,
-            fontSize: 12, marginLeft: 2
+            fontSize: 14, marginHorizontal: 5
         }
     })
 
-    const kategorie = ['전체', '스포츠', '스터디', '친목']
+    const kategorie = ['전체', '스포츠', '스터디', '친목', '게임', '여행', '취미']
 
     return <View style={{
         flex: 1, backgroundColor: cont.setting.theme.colors.background,
@@ -101,7 +103,7 @@ export default function EventList() {
         <SelectDropdown
             data={kategorie}
             onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index)
+                setSelect(index)
             }}
             buttonTextAfterSelection={(selectedItem, index) => {
                 return selectedItem
@@ -138,15 +140,12 @@ function rand() {
     return Math.floor(Math.random() * BGSIZE)
 }
 
-function getJSON(setData) {
+function getJSON(setData, select) {
     axios({
         method: 'get',
-        url: 'http://192.249.18.79/board'
+        url: 'http://192.249.18.79/eventboard?category=' + select
     })
         .then(function (response) {
-            // console.log(response.data)
-            console.log(typeof response.data)
-            console.log("response 받기 성공")
             setData(() => response.data)
         })
         .catch(function (error) {
@@ -155,6 +154,19 @@ function getJSON(setData) {
 }
 
 function initData() {
+    return [
+        {
+            _id: '',
+            title: '',
+            location: '',
+            content: '',
+            time: '',
+            headCount: 1
+        }
+    ]
+}
+
+function initData2() {
     return [
         {
             _id: "0",

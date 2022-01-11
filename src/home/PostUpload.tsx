@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import React from 'react'
 import { useState } from 'react'
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useContextOfAll } from '../Provider'
 
@@ -59,6 +59,14 @@ export default function PostUpload({ route }) {
 }
 
 function postex(title, content, boardid, navi) {
+    if (title == '') {
+        Alert.alert('알림', '제목을 작성해주세요.')
+        return
+    }
+    if (content == '') {
+        Alert.alert('알림', '내용을 작성해주세요.')
+        return
+    }
     axios({
         method: 'post',
         url: 'http://192.249.18.79/board/post?boardid=' + boardid + '&userid=61d87ae9fe46c6f094b969fe',

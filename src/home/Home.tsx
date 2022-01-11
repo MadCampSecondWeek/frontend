@@ -29,10 +29,10 @@ export default function Home() {
         }}>
             {cont.user.school}</Text>
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-            <EventCards />
-            {PostList(data.boards)}
-            {BestPost(data.todayPopularBoard)}
-            <HotPost />
+            {EventCards(data.eventBoard, cont, navi)}
+            {PostList(data.boards, cont)}
+            {BestPost(data.todayPopularBoard, cont)}
+            {HotPost(data.hotBoard, cont)}
         </ScrollView>
     </View>
 }
@@ -44,7 +44,6 @@ function getJSON(setData) {
     })
         .then(function (response) {
             setData(response.data)
-            console.log(response.data)
         })
         .catch(function (error) {
             console.log(error);
@@ -55,40 +54,41 @@ function getJSON(setData) {
 function initState() {
     return {
         boards: [
-            {
-                _id: "아이디",
-                title: '타이틀',
-                school: 2100,
-                idx: 30,
-                recentPost: '최근 게시글',
-            }
+            // {
+            //     _id: "아이디",
+            //     title: '',
+            //     school: 2100,
+            //     idx: 30,
+            //     recentPost: '',
+            // }
         ],
         hotBoard: [
-            {
-                _id: '아이디',
-                board: {
-                    _id: '아이디',
-                    title: '타이틀'
-                },
-                title: '게시글',
-                content: '내용',
-                likeCount: 100,
-                commentCount: 10
-            }
+            // {
+            //     _id: '아이디',
+            //     board: {
+            //         _id: '아이디',
+            //         title: ''
+            //     },
+            //     title: '',
+            //     content: '',
+            //     likeCount: 100,
+            //     commentCount: 10
+            // }
         ],
         todayPopularBoard: [
-            {
-                _id: '아이디',
-                board: {
-                    _id: '아이디',
-                    title: '타이틀'
-                },
-                title: '게시글',
-                content: '내용',
-                likeCount: 100,
-                commentCount: 10
-            }
-        ]
+            // {
+            //     _id: '아이디',
+            //     board: {
+            //         _id: '아이디',
+            //         title: ''
+            //     },
+            //     title: '',
+            //     content: '',
+            //     likeCount: 100,
+            //     commentCount: 10
+            // }
+        ],
+        eventBoard: []
 
     }
     // return [

@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
 import React, { useState } from 'react'
-import { Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useContextOfAll } from '../Provider'
 
@@ -9,6 +10,9 @@ const {width, height} = Dimensions.get('window')
 export default function Upload() {
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
+    const [time, setTime] = useState('')
+    const [location, setLocation] = useState('')
+    const [headCount, setHeadCount] = useState('')
     const [select, setSelect] = useState(-1)
     const navi = useNavigation<any>()
     const cont = useContextOfAll()
@@ -62,7 +66,7 @@ export default function Upload() {
                     <Icon name='close' color='white' size={28}
                         style={{ padding: 8 }} /></TouchableOpacity>
                 <Text style={styles.title}>이벤트 추가</Text></View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {onPress(navi, title, content, time, location, headCount, select)}}>
                 <Icon name='check-bold' color='#50D890' size={28} style={{ padding: 8 }} />
             </TouchableOpacity>
         </View>
@@ -74,55 +78,72 @@ export default function Upload() {
                 placeholder='내용' placeholderTextColor={'grey'} />
             <View style={styles.row}>
                 <Text style={styles.tag}>시간</Text>
-                <TextInput style={styles.info} /></View>
+                <TextInput style={styles.info} value={time} onChangeText={setTime} /></View>
             <View style={styles.row}>
                 <Text style={styles.tag}>장소</Text>
-                <TextInput style={styles.info} /></View>
+                <TextInput style={styles.info} value={location} onChangeText={setLocation} /></View>
             <View style={styles.row}>
                 <Text style={styles.tag}>인원</Text>
-                <TextInput style={styles.info} /></View>
+                <TextInput style={styles.info} keyboardType='numeric' onChangeText={setHeadCount}/></View>
             <Text style={[styles.tag, { paddingTop: 15 }]}>카테고리</Text>
             <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'center' }}>
-                <TouchableOpacity onPress={() => { setSelect(0) }}>
-                    <Text style={[styles.btn, {
-                        color: select == 0 ? 'black' : cont.setting.theme.colors.text, flex: 1,
-                        backgroundColor: select == 0 ? '#FFB830' : cont.setting.theme.colors.background
-                    }]}>스포츠</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => { setSelect(1) }}>
                     <Text style={[styles.btn, {
                         color: select == 1 ? 'black' : cont.setting.theme.colors.text, flex: 1,
                         backgroundColor: select == 1 ? '#FFB830' : cont.setting.theme.colors.background
-                    }]}>스터디</Text></TouchableOpacity>
+                    }]}>스포츠</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => { setSelect(2) }}>
                     <Text style={[styles.btn, {
                         color: select == 2 ? 'black' : cont.setting.theme.colors.text, flex: 1,
                         backgroundColor: select == 2 ? '#FFB830' : cont.setting.theme.colors.background
-                    }]}>친목</Text></TouchableOpacity></View>
-            <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'center' }}>
+                    }]}>스터디</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => { setSelect(3) }}>
                     <Text style={[styles.btn, {
-                        color: select == 3 ? 'black' : cont.setting.theme.colors.text,
+                        color: select == 3 ? 'black' : cont.setting.theme.colors.text, flex: 1,
                         backgroundColor: select == 3 ? '#FFB830' : cont.setting.theme.colors.background
-                    }]}>게임</Text></TouchableOpacity>
+                    }]}>친목</Text></TouchableOpacity></View>
+            <View style={{ paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'center' }}>
                 <TouchableOpacity onPress={() => { setSelect(4) }}>
                     <Text style={[styles.btn, {
                         color: select == 4 ? 'black' : cont.setting.theme.colors.text,
                         backgroundColor: select == 4 ? '#FFB830' : cont.setting.theme.colors.background
-                    }]}>여행</Text></TouchableOpacity>
+                    }]}>게임</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => { setSelect(5) }}>
                     <Text style={[styles.btn, {
                         color: select == 5 ? 'black' : cont.setting.theme.colors.text,
                         backgroundColor: select == 5 ? '#FFB830' : cont.setting.theme.colors.background
+                    }]}>여행</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => { setSelect(6) }}>
+                    <Text style={[styles.btn, {
+                        color: select == 6 ? 'black' : cont.setting.theme.colors.text,
+                        backgroundColor: select == 6 ? '#FFB830' : cont.setting.theme.colors.background
                     }]}>취미</Text></TouchableOpacity></View>
         </ScrollView>
     </View>
 }
 
-function getCat(styles, select, setSelect, cont) {
-    const cat = ['취미', '스포츠', '스터디', '게임', '여행', '친목']
-    return <TouchableOpacity onPress={() => { setSelect(5) }}>
-        <Text style={[styles.btn, {
-            color: select == 5 ? 'black' : 'white',
-            backgroundColor: select == 5 ? '#FFB830' : cont.setting.theme.colors.background
-        }]}>취미</Text></TouchableOpacity>
+function onPress(navi, title, content, time, location, headCount, category) {
+    if (title == '' || content == '' || time == '' || location == '' || headCount == '') {
+        Alert.alert('알림', '정보를 모두 작성해주세요.')
+        return
+    }
+    if (category == -1) {
+        Alert.alert('알림', '카테고리를 선택해주세요.')
+        return
+    }
+    axios({
+        method: 'post',
+        url: 'http://192.249.18.79/eventboard/event?category=' + category,
+        data: { title: title, content: content, headCount: headCount, time: time, location: location }
+    })
+        .then(function (response) { // 게시글 등록 실패 에러코드는 400, 정상 등록의 경우 200
+            console.log(response.data)
+            console.log(response.status)
+            console.log("response 받기 성공")
+            // setLoading(true)
+            navi.goBack()
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
 }

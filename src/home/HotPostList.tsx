@@ -7,7 +7,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { BackButton } from "../component/util"
 import { useContextOfAll } from "../Provider"
 
-export default function Posts({ route }) {
+export default function HotPostList() {
     const [data, setData] = useState(initState())
     const [loading, setLoading] = useState(true)
     const cont = useContextOfAll()
@@ -44,25 +44,12 @@ export default function Posts({ route }) {
         }
     })
 
-    // useEffect(() => { getJSON(setData, route.params._id, setLoading, loading) }, [])
-
-    useEffect(() => {
-        const reload = navi.addListener('focus', () => {
-            getJSON(setData, route.params._id, setLoading, loading)
-        });
-        return reload;
-      }, [navi]);
-
-    // if (loading) return <View />
+    useEffect(() => {getJSON(setData, setLoading, loading)}, []);
 
     return <View style={{flex:1}}>
         <View style={styles.titleView}>
             <BackButton />
-            <Text style={styles.title}>{route.params.name}</Text>
-            <TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 10 }}
-                onPress={() => { navi.navigate("게시글 업로드", { _id: route.params._id }); }}>
-                <Icon name='pencil-outline' size={25} color='royalblue' />
-            </TouchableOpacity>
+            <Text style={styles.title}>HOT 게시글</Text>
         </View>
         <ScrollView>
             {loading ? <View /> : data.map((v) => <TouchableOpacity key={v._id} style={styles.postView} activeOpacity={1}
@@ -81,60 +68,20 @@ export default function Posts({ route }) {
     </View>
 }
 
-function getJSON(setData, bid, setLoading, loading) {
+function getJSON(setData, setLoading, loading) {
     if (loading == false) return;
     axios({
         method: 'get',
-        url: 'http://192.249.18.79/board?boardid=' + bid
+        url: 'http://192.249.18.79/board/hot'
     })
         .then(function (response) {
             setData(response.data)
             setLoading(false)
-            console.log(response.data)
         })
         .catch(function (error) {
             setData([{ _id: "123123", title: "제목 0", content: "내용0", likeCount: 3, commentCount: 1 }])
             console.log(error);
         })
-    // return [
-    //     {
-    //         _id: "123123",
-    //         title: "제목 0",
-    //         content: "내용0",
-    //         likeCount: 3,
-    //         commentCount: 1
-    //     },
-    //     {
-    //         _id: "124124",
-    //         title: "제목 1",
-    //         content: "내용 1",
-    //         likeCount: 3,
-    //         commentCount: 1
-    //     },
-    //     {
-    //         _id: "125125",
-    //         title: "제목 2",
-    //         content: "내용 2",
-    //         likeCount: 3,
-    //         commentCount: 1
-    //     },
-    //     {
-    //         _id: "126126",
-    //         title: "제목 3",
-    //         content: "내용 3",
-    //         likeCount: 3,
-    //         commentCount: 1
-    //     },
-    //     {
-    //         _id: "127127",
-    //         title: "제목 4",
-    //         content: "내용 4",
-    //         likeCount: 3,
-    //         commentCount: 1
-    //     }
-    // ]
-
-    //{ _id: "123123", title: "제목 0", content: "내용0", likeCount: 3, commentCount: 1 }
 }
 
 function initState() {

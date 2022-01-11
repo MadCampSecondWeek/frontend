@@ -4,15 +4,21 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity } from "react-native
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useContextOfAll } from "../../Provider"
 
-export default function EventCards() {
-    const navi = useNavigation<any>()
-    const cont = useContextOfAll()
-    const data = getJSON()
+export default function EventCards(data, cont, navi) {
+    // const navi = useNavigation<any>()
+    // const cont = useContextOfAll()
+    // const data = getJSON()
     const renderItem = ({ item }) => (
         <Item currentData={item} />
     )
 
-    const Item = ({ currentData }) => (currentData.id == -1 ?
+    if ((typeof data) == 'string')
+        data = JSON.parse(data)
+
+    if (data.length > 0 && data[data.length - 1]._id != -1)
+        data.push({ _id: '-1' })
+
+    const Item = ({ currentData }) => (currentData._id == '-1' ?
         <TouchableOpacity onPress={() => { navi.navigate('이벤트') }}
             style={{ alignSelf: 'center', alignItems: 'center', padding: 15 }}>
             <Icon name='chevron-double-right' size={30}
@@ -20,20 +26,26 @@ export default function EventCards() {
             <Text style={{ color: 'grey', fontSize: 11 }}>
                 더 보기</Text>
         </TouchableOpacity> :
-        <TouchableOpacity style={styles.cardView} onPress={() => { navi.navigate("이벤트 정보")}}>
+        <TouchableOpacity style={styles.cardView} onPress={() => {
+            navi.navigate("이벤트", {
+                screen: '이벤트 정보',
+                initial: false,
+                params: { _id: currentData._id }
+            })
+        }}>
             <Text style={styles.title}>{currentData.title}</Text>
             <View style={styles.row}>
                 <Icon name='map-marker-outline' color='grey' size={15} />
-                <Text style={styles.infoText}>장소 정보</Text>
+                <Text style={styles.infoText}>{currentData.location}</Text>
             </View>
             <Text numberOfLines={2} ellipsizeMode={'tail'} style={styles.content}>
                 {currentData.content}</Text>
             <View style={styles.row}>
-                <Text style={[styles.infoText , {color: '#60abfb'}]}>01/10 13:00</Text>
+                <Text style={[styles.infoText, { color: '#60abfb', paddingLeft: 0 }]}>{currentData.time}</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingTop: 5 }}>
                 <Icon name='account-multiple-outline' color='#9b77da' size={15} />
-                <Text style={[styles.infoText, {color:'#9b77da'}]}>10명</Text></View>
+                <Text style={[styles.infoText, { color: '#9b77da' }]}>{currentData.headCount}</Text></View>
         </TouchableOpacity>
     );
 
@@ -66,7 +78,7 @@ export default function EventCards() {
         <FlatList
             data={data}
             renderItem={renderItem}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item._id}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
         />
@@ -76,37 +88,44 @@ export default function EventCards() {
 function getJSON() {
     return [
         {
-            id: 0,
+            _id: '0',
             title: "제목0",
             content: "내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0내용0",
-            time: "시간0"
+            time: "시간0",
+            location: '',
+            headCount: 10
         },
         {
-            id: 1,
+            _id: '1',
             title: "제목1",
             content: "내용1",
-            time: "시간1"
+            time: "시간1",
+            location: '',
+            headCount: 10
         },
         {
-            id: 2,
+            _id: '2',
             title: "제목2",
             content: "내용2",
-            time: "시간2"
+            time: "시간2",
+            location: '',
+            headCount: 10
         },
         {
-            id: 3,
+            _id: '3',
             title: "제목3",
             content: "내용3",
-            time: "시간3"
+            time: "시간3",
+            location: '',
+            headCount: 10
         },
         {
-            id: 4,
+            _id: '4',
             title: "제목4",
             content: "내용4",
-            time: "시간4"
-        },
-        {
-            id: -1,
+            time: "시간4",
+            location: '',
+            headCount: 10
         }
     ]
 }

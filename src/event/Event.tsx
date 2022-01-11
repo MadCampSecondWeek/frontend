@@ -1,14 +1,16 @@
 import { useNavigation } from "@react-navigation/native"
-import React from "react"
+import React, { useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import EventList from "../component/event/EventList"
+import {EventList} from "../component/event/EventList"
 import { useContextOfAll } from "../Provider"
 
-export default function Event() {
+export default function Event({route}) {
     const navi = useNavigation<any>()
-
     const cont = useContextOfAll()
+
+    if (!(route.params === undefined))
+        navi.navigate('이벤트 정보', {_id: route.params._id})
 
     const styles = StyleSheet.create({
         title: {
@@ -28,6 +30,6 @@ export default function Event() {
                     <Icon name='pencil-outline' color='royalblue' size={25} style={{ padding: 10 }} /></TouchableOpacity>
             </View>
         </View>
-        <EventList />
+        <EventList/>
     </View>
 }

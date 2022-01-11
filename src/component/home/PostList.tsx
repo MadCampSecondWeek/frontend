@@ -5,8 +5,8 @@ import { useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useContextOfAll } from "../../Provider"
 
-export default function PostList(data) {
-    const cont = useContextOfAll()
+export default function PostList(data, cont) {
+    // const cont = useContextOfAll()
     const navi = useNavigation<any>()
 
     const styles = StyleSheet.create({
@@ -42,7 +42,6 @@ export default function PostList(data) {
     })
 
     // useEffect(() => {getJSON(setData)}, [])
-    console.log(data)
 
     return <View style={styles.view}>
         <TouchableOpacity style={styles.titleRow} onPress={() => {navi.navigate('게시판 추가')}}>

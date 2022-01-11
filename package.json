@@ -34,7 +34,8 @@
     "react-native-select-dropdown": "^1.7.0",
     "react-native-tab-view": "^3.1.1",
     "react-native-vector-icons": "^9.0.0",
-    "react-navigation-tabs": "^2.11.1"
+    "react-navigation-tabs": "^2.11.1",
+    "socket.io-client": "^2.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

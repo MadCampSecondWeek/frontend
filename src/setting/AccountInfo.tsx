@@ -1,5 +1,6 @@
+import axios from 'axios'
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { BackButton } from '../component/util'
 import { useContextOfAll } from '../Provider'
 
@@ -31,8 +32,25 @@ export default function AccountInfo() {
             <BackButton />
             <Text style={styles.title}>계정 정보</Text>
         </View>
-        <TouchableOpacity style={styles.row} onPress={() => { cont.setLogin(false) }}>
+        <TouchableOpacity style={styles.row} onPress={() => { onPressLogout(cont) }}>
             <Text style={styles.text}>로그아웃</Text>
         </TouchableOpacity>
     </View>
+}
+
+function onPressLogout(cont) {
+    Alert.alert('로그아웃', '로그아웃 하시겠습니까?', [{ text: '취소' }, {
+        text: '확인', onPress: () => {
+            axios({
+                method: 'post',
+                url: 'http://192.249.18.79/auth/logout'
+            })
+                .then(function (response) {
+                    cont.setLogin(false)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+    }])
 }
