@@ -17,43 +17,52 @@ export const EventList: FC<{}> = () => {
     const [data, setData] = useState([])
 
     useEffect(() => {
-        getJSON(setData, select)
-    }, [select]);
+        const reload = navi.addListener('focus', () => {
+            getJSON(setData, select)
+        });
+        return reload;
+    }, [navi]);
+    useEffect(() => { getJSON(setData, select) }, [select]);
+    // useEffect(() => {
+    //     getJSON(setData, select)
+    // }, [select]);
 
     const renderItem = ({ item }) => (
         <Item currentData={item} />
     )
-    
-    const Item = ({ currentData }) => <TouchableOpacity style={styles.cardView} onPress={() => {
-        navi.navigate("이벤트 정보", { _id: currentData._id })
-    }} activeOpacity={1}>
-        <Image source={bg[currentData.category]}
-            style={{
-                width: '100%', height: 200, borderColor: 'white', alignSelf: 'center',
-                borderTopRightRadius: 10, borderTopLeftRadius: 10
-            }}
-            resizeMode='cover' />
-        <Text style={styles.title}>{currentData.title}</Text>
-        <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-            <View style={styles.scrapView}>
-                <Icon name='map-marker-outline' color='grey' size={17} />
-                <Text style={[styles.infoText, { color: 'grey' }]}>{currentData.location}</Text></View>
-            <View style={styles.scrapView}>
-                <Icon name='star-outline' color='gold' size={17} />
-                <Text style={styles.scrapText}>{currentData.scrapCount}</Text></View>
-        </View>
-        <Text numberOfLines={2} ellipsizeMode={'tail'} style={styles.content}>
-            {currentData.content}</Text>
-        <View style={{ justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 30, paddingVertical: 10 }}>
-            <View style={{ width: '50%' }}>
-                <Text style={[styles.infoText, { color: 'grey' }]}>시간</Text>
-                <Text style={[styles.infoText,]}>{currentData.time}</Text>
+
+    const Item = ({ currentData }) => {
+        return <TouchableOpacity style={styles.cardView} onPress={() => {
+            navi.navigate("이벤트 정보", { _id: currentData._id })
+        }} activeOpacity={1}>
+            <Image source={bg[currentData.category - 1]}
+                style={{
+                    width: '100%', height: 200, borderColor: 'white', alignSelf: 'center',
+                    borderTopRightRadius: 10, borderTopLeftRadius: 10
+                }}
+                resizeMode='cover' />
+            <Text style={styles.title}>{currentData.title}</Text>
+            <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                <View style={styles.scrapView}>
+                    <Icon name='map-marker-outline' color='grey' size={17} />
+                    <Text style={[styles.infoText, { color: 'grey' }]}>{currentData.location}</Text></View>
+                <View style={styles.scrapView}>
+                    <Icon name='star-outline' color='gold' size={17} />
+                    <Text style={styles.scrapText}>{currentData.scrapCount}</Text></View>
             </View>
-            <View style={{ width: '50%' }}>
-                <Text style={[styles.infoText, { color: 'grey' }]}>인원</Text>
-                <Text style={[styles.infoText,]}>{currentData.headCount}</Text></View>
-        </View>
-    </TouchableOpacity>
+            <Text numberOfLines={2} ellipsizeMode={'tail'} style={styles.content}>
+                {currentData.content}</Text>
+            <View style={{ justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 30, paddingVertical: 10 }}>
+                <View style={{ width: '50%' }}>
+                    <Text style={[styles.infoText, { color: 'grey' }]}>시간</Text>
+                    <Text style={[styles.infoText,]}>{currentData.time}</Text>
+                </View>
+                <View style={{ width: '50%' }}>
+                    <Text style={[styles.infoText, { color: 'grey' }]}>인원</Text>
+                    <Text style={[styles.infoText,]}>{currentData.headCount}</Text></View>
+            </View>
+        </TouchableOpacity>
+    }
 
     const styles = StyleSheet.create({
         cardView: {

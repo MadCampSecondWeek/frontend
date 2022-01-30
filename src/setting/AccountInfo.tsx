@@ -32,6 +32,10 @@ export default function AccountInfo() {
             <BackButton />
             <Text style={styles.title}>계정 정보</Text>
         </View>
+        <View style={{flexDirection: 'row', padding: 30}}>
+            <Text style={[styles.text, {fontSize: 17, fontWeight: 'bold', marginRight: 20}]}>학교</Text>
+            <Text style={styles.text}>{cont.user.school}</Text>
+        </View>
         <TouchableOpacity style={styles.row} onPress={() => { onPressLogout(cont) }}>
             <Text style={styles.text}>로그아웃</Text>
         </TouchableOpacity>

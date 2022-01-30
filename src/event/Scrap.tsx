@@ -23,7 +23,7 @@ export default function Scrap() {
     const Item = ({ currentData }) => <TouchableOpacity style={styles.cardView} onPress={() => {
         navi.navigate("이벤트 정보", { _id: currentData._id })
     }} activeOpacity={1}>
-        <Image source={bg[0]}
+        <Image source={bg[currentData.category]}
             style={{
                 width: '100%', height: 200, borderColor: 'white', alignSelf: 'center',
                 borderTopRightRadius: 10, borderTopLeftRadius: 10

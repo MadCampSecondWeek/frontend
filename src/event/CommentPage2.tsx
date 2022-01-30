@@ -92,8 +92,8 @@ function onPress(navi, content, school, contact, headCount, _id) {
     }
     axios({
         method: 'post',
-        url: 'http://192.249.18.79/eventboard/event/apply?eventid=' + _id,
-        data: { content: content, headCount: headCount }
+        url: 'http://192.249.18.79/eventboard/apply?eventid=' + _id,
+        data: { content: content, school: school, contact: contact, headCount: headCount }
     })
         .then(function (response) { // 게시글 등록 실패 에러코드는 400, 정상 등록의 경우 200
             navi.goBack()

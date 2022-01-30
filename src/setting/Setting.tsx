@@ -3,7 +3,6 @@ import { StyleSheet, Switch, Text, View } from "react-native"
 import AccountSetting from "../component/setting/AccountSetting"
 import AppSetting from "../component/setting/AppSetting"
 import { useContextOfAll } from "../Provider"
-import { DarkTheme, DayTheme } from "../Themes"
 
 
 export default function Setting() {
@@ -15,7 +14,7 @@ export default function Setting() {
         }
     })
     return <View>
-        <Text style={style.title}>내 정보</Text>
+        <Text style={style.title}>설정</Text>
         <AppSetting />
         <AccountSetting />
     </View>

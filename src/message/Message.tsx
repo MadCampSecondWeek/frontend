@@ -70,7 +70,7 @@ export default function Message() {
             console.log('connection');
             setMsg('연결 성공')
         })
-        socket.current?.emit('join', cont.user.school);
+        socket.current?.emit('join', school);
         socket.current?.on('getMessage', (message) => {
             setMsgList((prev) => { let newList = [...prev]; newList.push({msg: message, isMe: false}); return newList })
         });

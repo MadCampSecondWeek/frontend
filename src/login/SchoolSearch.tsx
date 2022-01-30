@@ -8,7 +8,7 @@ import { useContextOfLogin } from './LoginProvider'
 
 export default function SchoolSearch() {
     const [text, setText] = useState('')
-    const [names, setNames] = useState([])
+    const [names, setNames] = useState([''])
     const navi = useNavigation<any>()
     const loginCont = useContextOfLogin()
     return <View style={{ backgroundColor: 'white', flex: 1 }}>
@@ -33,22 +33,23 @@ export default function SchoolSearch() {
                     borderRadius: 10, backgroundColor: 'grey'
                 }}>검색</Text></TouchableOpacity>
         </View>
-        <ScrollView style={{ flex: 1 }}>
-            {names.length == 0 ? <TouchableOpacity onPress={() => { loginCont.setSchoolName(text); navi.goBack() }}>
-                <Text style={{
-                    borderWidth: 1, borderColor: 'royalblue',
-                    marginVertical: 5, marginHorizontal: 20, padding: 10,
-                    borderRadius: 10, fontSize: 17, color: 'royalblue'
-                }}>"{text}"로 학교 설정하기</Text></TouchableOpacity> :
-                names.map((v, i) => <TouchableOpacity onPress={() => { loginCont.setSchoolName(v) }} key={i}
-                    style={{
+        {names.length == 1 && names[0].length == 0 ? undefined :
+            <ScrollView style={{ flex: 1 }}>
+                {names.length == 0 ? <TouchableOpacity onPress={() => { loginCont.setSchoolName(text); navi.goBack() }}>
+                    <Text style={{
                         borderWidth: 1, borderColor: 'royalblue',
                         marginVertical: 5, marginHorizontal: 20, padding: 10,
-                        borderRadius: 10, backgroundColor: v == loginCont.schoolName ? 'royalblue' : 'white'
-                    }}>
-                    <Text style={{ fontSize: 17, color: v == loginCont.schoolName ? 'white' : 'royalblue' }}>{v}</Text>
-                </TouchableOpacity>)}
-        </ScrollView>
+                        borderRadius: 10, fontSize: 17, color: 'royalblue', textAlign: 'center'
+                    }}>"{text}"(으)로 학교 설정하기</Text></TouchableOpacity> :
+                    names.map((v, i) => <TouchableOpacity onPress={() => { loginCont.setSchoolName(v) }} key={i}
+                        style={{
+                            borderWidth: 1, borderColor: 'royalblue',
+                            marginVertical: 5, marginHorizontal: 20, padding: 10,
+                            borderRadius: 10, backgroundColor: v == loginCont.schoolName ? 'royalblue' : 'white'
+                        }}>
+                        <Text style={{ fontSize: 17, color: v == loginCont.schoolName ? 'white' : 'royalblue' }}>{v}</Text>
+                    </TouchableOpacity>)}
+            </ScrollView>}
     </View>
 }
 

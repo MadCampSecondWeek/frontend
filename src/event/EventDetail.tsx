@@ -1,25 +1,22 @@
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Alert, Image, ImageBackground, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import CommentTab from '../component/event/CommentTab'
-import { BackButton } from '../component/util'
 import { useContextOfAll } from '../Provider'
 import { bg } from './imageArray'
 
 export default function EventDetail({ route }) {
     const [currentData, setData] = useState(initData())
+    const [loading, setLoading] = useState(true)
     const navi = useNavigation<any>()
     const cont = useContextOfAll()
 
-    useEffect(() => {
-        const reload = navi.addListener('focus', () => {
-            getJSON(route.params._id, setData)
-        });
-        return reload;
-    }, [navi]);
+    useEffect(() => { getJSON(route.params._id, setData, setLoading) }, []);
+
+    if (loading) return <View/>
 
     const styles = StyleSheet.create({
         topTitle: {
@@ -81,7 +78,7 @@ export default function EventDetail({ route }) {
         </View>
         <ScrollView style={{ flex: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30 }}>
             <View style={styles.cardView}>
-                <Image source={bg[0]}
+                <Image source={bg[currentData.category - 1]}
                     style={{
                         width: '100%', height: 250, borderColor: 'white', alignSelf: 'center',
                         borderTopRightRadius: 30, borderTopLeftRadius: 30
@@ -104,18 +101,18 @@ export default function EventDetail({ route }) {
                     <Text style={styles.scrapText}>{currentData.scrapCount}</Text></TouchableOpacity>
             </View>
         </ScrollView>
-        {CommentTab(cont, navi, currentData._id)}
+        {CommentTab(cont, navi, route.params._id, currentData.isApplied, currentData.isAuthor)}
     </View>
 }
 
-function getJSON(_id, setData) {
+function getJSON(_id, setData, setLoading) {
     axios({
         method: 'get',
         url: 'http://192.249.18.79/eventboard/event?eventid=' + _id
     })
         .then(function (response) {
             setData(() => response.data)
-            console.log(response.data)
+            setLoading(false)
         })
         .catch(function (error) {
             console.log(error);
@@ -166,6 +163,8 @@ function initData() {
         location: "",
         scrapCount: 0,
         isScrapped: false,
-        isAuthor: false
+        isAuthor: false,
+        category: 0,
+        isApplied: false
     }
 }
